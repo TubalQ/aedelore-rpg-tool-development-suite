@@ -1,0 +1,12 @@
+{
+  "name": "aedelore-frontend",
+  "version": "1.0.0",
+  "description": "Aedelore PWA frontend build tools",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

@@ -1,0 +1,31 @@
+# Environment and secrets
+.env
+*.env.local
+
+# Database files
+*.db
+*.sqlite
+*.sql
+
+# Node modules
+node_modules/
+
+# Build artifacts
+*.min.js
+*.min.js.map
+
+# API data (runtime generated)
+api/data/
+
+# Backups (may contain sensitive data)
+backups/*.sql
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

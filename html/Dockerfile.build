@@ -1,0 +1,6 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies at runtime (after volume mount)
+CMD ["sh", "-c", "npm install && npm run build"]

@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose:*)",
+      "Bash(docker:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(wget:*)",
+      "Bash(unzip:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(sqlite3:*)",
+      "Bash(./gradlew:*)",
+      "Bash(java:*)",
+      "Bash(export:*)",
+      "Bash(yes:*)",
+      "Bash(sdkmanager:*)",
+      "Bash(gradle:*)",
+      "Bash(apt-get:*)",
+      "Bash(apt-cache:*)",
+      "Bash(ss:*)",
+      "Bash(netstat:*)",
+      "WebSearch",
+      "WebFetch(domain:wiki.aedelore.nu)",
+      "WebFetch(domain:aedelore.nu)"
+    ]
+  }
+}

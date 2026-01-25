@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aedelore Character Sheet - Interactive RPG Character Creator</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Create and manage your Aedelore RPG character with our interactive character sheet. Track attributes, combat stats, spells, inventory, and roll dice online.">
+    <meta name="keywords" content="Aedelore character sheet, RPG character creator, fantasy character builder, tabletop RPG tools, character manager, dice roller">
+    <meta name="author" content="World of Aedelore">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://aedelore.nu/character-sheet">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aedelore.nu/character-sheet">
+    <meta property="og:title" content="Aedelore Character Sheet - Interactive RPG Character Creator">
+    <meta property="og:description" content="Create and manage your Aedelore RPG character. Track attributes, combat, spells, and inventory with our interactive character sheet.">
+    <meta property="og:image" content="https://aedelore.nu/uploads/images/system/2025-09/world-of-aedelore.jpg">
+    <meta property="og:site_name" content="World of Aedelore">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://aedelore.nu/character-sheet">
+    <meta name="twitter:title" content="Aedelore Character Sheet - Interactive RPG Character Creator">
+    <meta name="twitter:description" content="Create and manage your Aedelore RPG character. Track attributes, combat, spells, and inventory with our interactive character sheet.">
+    <meta name="twitter:image" content="https://aedelore.nu/uploads/images/system/2025-09/world-of-aedelore.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="https://aedelore.nu/uploads/images/system/2025-09/world-of-aedelore.jpg">
+    <link rel="apple-touch-icon" href="https://aedelore.nu/uploads/images/system/2025-09/world-of-aedelore.jpg">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Aedelore Character Sheet",
+        "description": "Interactive character sheet for the Aedelore fantasy RPG world",
+        "url": "https://aedelore.nu/character-sheet",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        }
+    }
+    </script>
+
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="back-button" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(59, 158, 255, 0.15) 100%); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 8px; color: var(--text-base); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: all 0.2s;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                Back
+            </a>
+            <h1>
+                Aedelore
+                <span class="subtitle">Interactive Character Sheet</span>
+            </h1>
+            <div class="header-menus">
+                <!-- Menu Dropdown -->
+                <div class="dropdown" id="menu-dropdown">
+                    <button class="dropdown-trigger" onclick="toggleDropdown('menu-dropdown')">
+                        <svg class="icon-main" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                        Menu
+                        <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-label">Local Storage</div>
+                        <button class="dropdown-item" onclick="saveCharacter(); closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Save to Browser
+                        </button>
+                        <button class="dropdown-item" onclick="loadCharacter(); closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                            Load from Browser
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-label">File</div>
+                        <button class="dropdown-item" onclick="exportCharacter(); closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Export JSON
+                        </button>
+                        <button class="dropdown-item" onclick="importCharacter(); closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Import JSON
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-label">Other</div>
+                        <button class="dropdown-item" onclick="window.print(); closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                            Print
+                        </button>
+                        <button class="dropdown-item danger" onclick="clearCharacter(); closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Clear Sheet
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item success" href="aedelore-character-sheet.apk" download onclick="closeDropdowns();">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+                            Download Android App
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Server/Cloud Dropdown -->
+                <div class="dropdown dropdown-server" id="server-dropdown">
+                    <button class="dropdown-trigger" onclick="toggleDropdown('server-dropdown')">
+                        <svg class="icon-main" id="server-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                        <span id="server-btn-text">Cloud</span>
+                        <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <!-- Logged out state -->
+                        <div id="server-logged-out">
+                            <button class="dropdown-item" onclick="showAuthModal('login'); closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                                Login
+                            </button>
+                            <button class="dropdown-item" onclick="showAuthModal('register'); closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                                Register
+                            </button>
+                        </div>
+                        <!-- Logged in state -->
+                        <div id="server-logged-in" style="display: none;">
+                            <div class="dropdown-label">Sync</div>
+                            <button class="dropdown-item" onclick="saveToServer(); closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="M12 13v5"/><path d="m9 18 3 3 3-3"/></svg>
+                                Save to Cloud
+                            </button>
+                            <button class="dropdown-item" onclick="loadFromServer(); closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><path d="M12 13v5"/><path d="m9 13 3-3 3 3"/></svg>
+                                Load from Cloud
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-label">DM Tools</div>
+                            <a class="dropdown-item" href="dm-session.html" onclick="closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                                DM Sessions
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-label">Account</div>
+                            <button class="dropdown-item" onclick="doLogout(); closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                Logout
+                            </button>
+                            <button class="dropdown-item danger" onclick="deleteAccount(); closeDropdowns();">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="tab-container">
+            <div class="tab active" onclick="switchTab('page-info')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Info</div>
+            <div class="tab" onclick="switchTab('page-attributes')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg> Attributes</div>
+            <div class="tab" onclick="switchTab('page-combat')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg> Combat</div>
+            <div class="tab" onclick="switchTab('page-spells')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg> Spells</div>
+            <div class="tab" onclick="switchTab('page-consumables')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Potions</div>
+            <div class="tab" onclick="switchTab('page-inventory')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Inventory</div>
+            <div class="tab" onclick="switchTab('page-dices')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></svg> Dices</div>
+            <div class="tab" onclick="switchTab('page-rules')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Rules</div>
+            <div class="tab" onclick="switchTab('page-help')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> Help</div>
+        </div>
+
+        <!-- Page: Character Info -->
+        <div id="page-info" class="tab-content active">
+            <!-- Basic Info -->
+            <div class="section">
+                <div class="grid grid-2">
+                    <div class="field-group">
+                        <label>Character Name</label>
+                        <input type="text" id="character_name" placeholder="Enter character name">
+                    </div>
+                    <div class="field-group">
+                        <label>Player Name</label>
+                        <input type="text" id="player_name" placeholder="Enter player name">
+                    </div>
+                    <div class="field-group">
+                        <label>Race</label>
+                        <select id="race">
+                            <option value="">Select Race...</option>
+                            <option value="Human">Human</option>
+                            <option value="Dwarf">Dwarf</option>
+                            <option value="Halfling">Halfling</option>
+                            <option value="High Elf">High Elf</option>
+                            <option value="Moon Elf">Moon Elf</option>
+                            <option value="Orc">Orc</option>
+                            <option value="Troll">Troll</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Class</label>
+                        <select id="class">
+                            <option value="">Select Class...</option>
+                            <option value="Warrior">Warrior</option>
+                            <option value="Thief/Rogue">Thief/Rogue</option>
+                            <option value="Outcast">Outcast</option>
+                            <option value="Mage">Mage</option>
+                            <option value="Hunter">Hunter</option>
+                            <option value="Druid">Druid</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Religion</label>
+                        <select id="religion">
+                            <option value="">Select Religion...</option>
+                            <option value="Creed of Shadows (Noctara)">Creed of Shadows (Noctara)</option>
+                            <option value="The Shattered Path (Tatsu)">The Shattered Path (Tatsu)</option>
+                            <option value="The Silent Hunt (Groove Guardian)">The Silent Hunt (Groove Guardian)</option>
+                            <option value="The Stone's Heart (Great Mountain)">The Stone's Heart (Great Mountain)</option>
+                            <option value="The Veil of Tohu">The Veil of Tohu</option>
+                            <option value="Earthsong Covenant">Earthsong Covenant</option>
+                            <option value="The Flame of Taninsam">The Flame of Taninsam</option>
+                            <option value="Nature's Embrace (Tiamat)">Nature's Embrace (Tiamat)</option>
+                            <option value="The Soul of the Clan">The Soul of the Clan</option>
+                            <option value="The Abyssal Veil">The Abyssal Veil</option>
+                            <option value="The Radiant Path">The Radiant Path</option>
+                            <option value="The Black Rebellion">The Black Rebellion</option>
+                            <option value="The Arcane Creed">The Arcane Creed</option>
+                            <option value="The Voices of the Forgotten Loa">The Voices of the Forgotten Loa</option>
+                            <option value="None">None</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Miscs -->
+            <div class="section">
+                <h2 class="section-title">Miscs</h2>
+                <textarea id="miscs" placeholder="Additional notes, items, or information..." rows="4"></textarea>
+
+                <h3 style="color: var(--accent-gold); margin-top: 20px; margin-bottom: 10px;">Background</h3>
+                <textarea id="background" placeholder="Enter your character's background story, history, and personality..." rows="6"></textarea>
+            </div>
+        </div>
+
+        <!-- Page: Attributes -->
+        <div id="page-attributes" class="tab-content">
+            <!-- Willpower & Health -->
+            <div class="section">
+                <h2 class="section-title">Willpower & Health</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- Willpower Slider -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Willpower</span>
+                            <span id="willpower-value-display">3 / 3</span>
+                        </div>
+                        <input type="range" id="willpower_slider" min="0" max="3" value="3">
+                    </div>
+
+                    <!-- HP Slider -->
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span style="color: #ef4444;">Health Points (HP)</span>
+                            <span id="hp-value-display" style="color: #ef4444;">0 / 24</span>
+                        </div>
+                        <input type="range" id="hp_slider" min="0" max="24" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Race/Class/Religion Bonuses -->
+            <div class="section">
+                <h2 class="section-title">Race, Class & Religion Bonuses</h2>
+                <p style="color: var(--accent-gold); margin-bottom: 15px; padding: 12px 15px; background: linear-gradient(135deg, rgba(240, 192, 64, 0.15) 0%, rgba(240, 192, 64, 0.05) 100%); border-radius: 8px; border-left: 3px solid var(--accent-gold);">
+                    <strong>Note:</strong> You have <strong>+10 free points</strong> to distribute among your attributes as you wish!
+                </p>
+                <div class="grid grid-3">
+                    <div style="background: linear-gradient(180deg, rgba(59, 158, 255, 0.1) 0%, rgba(59, 158, 255, 0.02) 100%); padding: 15px; border-radius: 8px; border: 1px solid rgba(59, 158, 255, 0.3);">
+                        <h3 id="race-bonuses-header" style="color: var(--primary-blue); margin-bottom: 10px;">Race Bonuses</h3>
+                        <div id="race-bonuses" style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            <em>Select a race to see bonuses</em>
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(180deg, rgba(34, 217, 127, 0.1) 0%, rgba(34, 217, 127, 0.02) 100%); padding: 15px; border-radius: 8px; border: 1px solid rgba(34, 217, 127, 0.3);">
+                        <h3 id="class-bonuses-header" style="color: var(--primary-green); margin-bottom: 10px;">Class Bonuses</h3>
+                        <div id="class-bonuses" style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            <em>Select a class to see bonuses</em>
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(180deg, rgba(240, 192, 64, 0.1) 0%, rgba(240, 192, 64, 0.02) 100%); padding: 15px; border-radius: 8px; border: 1px solid rgba(240, 192, 64, 0.3);">
+                        <h3 id="religion-bonuses-header" style="color: var(--accent-gold); margin-bottom: 10px;">Religion Bonuses</h3>
+                        <div id="religion-bonuses" style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            <em>Select a religion to see bonuses</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Attributes</h2>
+                <div class="grid grid-2">
+                    <!-- Strength -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">STRENGTH</span>
+                            <input type="number" class="attribute-value" id="strength_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Athletics</span>
+                                <input type="number" class="skill-value" id="strength_athletics" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Raw Power</span>
+                                <input type="number" class="skill-value" id="strength_raw_power" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Unarmed</span>
+                                <input type="number" class="skill-value" id="strength_unarmed" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dexterity -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">DEXTERITY</span>
+                            <input type="number" class="attribute-value" id="dexterity_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Endurance</span>
+                                <input type="number" class="skill-value" id="dexterity_endurance" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Acrobatics</span>
+                                <input type="number" class="skill-value" id="dexterity_acrobatics" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Sleight of Hand</span>
+                                <input type="number" class="skill-value" id="dexterity_sleight_of_hand" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Stealth</span>
+                                <input type="number" class="skill-value" id="dexterity_stealth" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Toughness -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">TOUGHNESS</span>
+                            <input type="number" class="attribute-value" id="toughness_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Bonus While Injured</span>
+                                <input type="number" class="skill-value" id="toughness_bonus_while_injured" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Resistance</span>
+                                <input type="number" class="skill-value" id="toughness_resistance" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intelligence -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">INTELLIGENCE</span>
+                            <input type="number" class="attribute-value" id="intelligence_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Arcana (1p = 1 regen/rest)</span>
+                                <input type="number" class="skill-value" id="intelligence_arcana" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">History</span>
+                                <input type="number" class="skill-value" id="intelligence_history" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Investigation</span>
+                                <input type="number" class="skill-value" id="intelligence_investigation" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Nature</span>
+                                <input type="number" class="skill-value" id="intelligence_nature" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Religion</span>
+                                <input type="number" class="skill-value" id="intelligence_religion" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wisdom -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">WISDOM</span>
+                            <input type="number" class="attribute-value" id="wisdom_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Luck</span>
+                                <input type="number" class="skill-value" id="wisdom_luck" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Animal Handling</span>
+                                <input type="number" class="skill-value" id="wisdom_animal_handling" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Insight</span>
+                                <input type="number" class="skill-value" id="wisdom_insight" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Medicine</span>
+                                <input type="number" class="skill-value" id="wisdom_medicine" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Perception</span>
+                                <input type="number" class="skill-value" id="wisdom_perception" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Survival</span>
+                                <input type="number" class="skill-value" id="wisdom_survival" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Force of Will -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">FORCE OF WILL</span>
+                            <input type="number" class="attribute-value" id="force_of_will_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Deception</span>
+                                <input type="number" class="skill-value" id="force_of_will_deception" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Intimidation</span>
+                                <input type="number" class="skill-value" id="force_of_will_intimidation" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Performance</span>
+                                <input type="number" class="skill-value" id="force_of_will_performance" placeholder="0">
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">Persuasion</span>
+                                <input type="number" class="skill-value" id="force_of_will_persuasion" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Third Eye -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">THIRD EYE</span>
+                            <input type="number" class="attribute-value" id="third_eye_value" placeholder="0">
+                        </div>
+                        <div class="skill-list">
+                            <div class="skill-item">
+                                <span class="skill-name">Perception</span>
+                                <input type="number" class="skill-value" id="third_eye_perception" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Worthiness / Reputation -->
+                    <div class="attribute-section">
+                        <div class="attribute-header">
+                            <span class="attribute-name">WORTHINESS / REPUTATION</span>
+                        </div>
+                        <div class="skill-list">
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; font-style: italic; padding: 5px 10px; margin-bottom: 10px;">
+                                Influences how NPCs treat you. Higher = more respect and trust.
+                            </p>
+                            <div class="slider-container" style="max-width: 400px; margin: 0 10px;">
+                                <div class="slider-label">
+                                    <span>Worthiness</span>
+                                    <span id="worthiness-value-display">0 / 10</span>
+                                </div>
+                                <input type="range" id="worthiness_slider" min="-10" max="10" value="0">
+                                <p id="worthiness-description" style="margin-top: 10px; padding: 8px; background: rgba(139, 92, 246, 0.1); border-radius: 5px; font-size: 0.85rem; font-style: italic; text-align: center; min-height: 45px;">
+                                    People don't care about you, you are a nobody
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Combat & Equipment -->
+        <div id="page-combat" class="tab-content">
+            <!-- Shield -->
+            <div class="section">
+                <h2 class="section-title">Shield</h2>
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Hitpoints</th>
+                                <th>Block Value</th>
+                                <th>Defence</th>
+                                <th>Damage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select id="shield_type">
+                                        <option value="">Shield type</option>
+                                        <option value="Shield (Wooden)">Shield (Wooden)</option>
+                                        <option value="Shield (Metal)">Shield (Metal)</option>
+                                        <option value="Shield (Tower)">Shield (Tower)</option>
+                                        <option value="Small Shield">Small Shield</option>
+                                        <option value="Spiked Shield">Spiked Shield</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="shield_hp" placeholder="HP"></td>
+                                <td><input type="number" id="shield_block" placeholder="Block"></td>
+                                <td><input type="number" id="shield_defence" placeholder="Defence"></td>
+                                <td><input type="text" id="shield_dmg" placeholder="Damage"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Shield datalist -->
+                <datalist id="shield-list">
+                    <option value="Shield (Wooden)">
+                    <option value="Shield (Metal)">
+                    <option value="Shield (Tower)">
+                    <option value="Spiked Shield">
+                </datalist>
+            </div>
+
+            <!-- Armor -->
+            <div class="section">
+                <h2 class="section-title">Armour</h2>
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Hitpoints</th>
+                                <th>Block</th>
+                                <th>Dmg on Armour</th>
+                                <th>Disadvantage</th>
+                                <th>Broken</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="armor_1_row">
+                                <td>
+                                    <select id="armor_1_type">
+                                        <option value="">Head</option>
+                                        <option value="Cloth Hood">Cloth Hood</option>
+                                        <option value="Leather Cap">Leather Cap</option>
+                                        <option value="Chain Coif">Chain Coif</option>
+                                        <option value="Light Helmet">Light Helmet</option>
+                                        <option value="Heavy Helmet">Heavy Helmet</option>
+                                        <option value="Great Helm">Great Helm</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="armor_1_hp" placeholder="HP"></td>
+                                <td><input type="text" id="armor_1_bonus" placeholder="4+block"></td>
+                                <td><input type="text" id="armor_1_dmg" placeholder="Damage"></td>
+                                <td><input type="text" id="armor_1_disadvantage" placeholder="Disadvantage"></td>
+                                <td style="text-align: center;"><input type="checkbox" id="armor_1_broken" onchange="toggleArmorBroken(1)"></td>
+                            </tr>
+                            <tr id="armor_2_row">
+                                <td>
+                                    <select id="armor_2_type">
+                                        <option value="">Shoulders</option>
+                                        <option value="Cloth Mantle">Cloth Mantle</option>
+                                        <option value="Leather Pauldrons">Leather Pauldrons</option>
+                                        <option value="Studded Pauldrons">Studded Pauldrons</option>
+                                        <option value="Chain Pauldrons">Chain Pauldrons</option>
+                                        <option value="Plate Pauldrons">Plate Pauldrons</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="armor_2_hp" placeholder="HP"></td>
+                                <td><input type="text" id="armor_2_bonus" placeholder="4+block"></td>
+                                <td><input type="text" id="armor_2_dmg" placeholder="Damage"></td>
+                                <td><input type="text" id="armor_2_disadvantage" placeholder="Disadvantage"></td>
+                                <td style="text-align: center;"><input type="checkbox" id="armor_2_broken" onchange="toggleArmorBroken(2)"></td>
+                            </tr>
+                            <tr id="armor_3_row">
+                                <td>
+                                    <select id="armor_3_type">
+                                        <option value="">Chest</option>
+                                        <option value="Cloth">Cloth</option>
+                                        <option value="Padded">Padded</option>
+                                        <option value="Leather">Leather</option>
+                                        <option value="Studded Leather">Studded Leather</option>
+                                        <option value="Hide">Hide</option>
+                                        <option value="Chain Shirt">Chain Shirt</option>
+                                        <option value="Scale Mail">Scale Mail</option>
+                                        <option value="Breastplate">Breastplate</option>
+                                        <option value="Half Plate">Half Plate</option>
+                                        <option value="Ring Mail">Ring Mail</option>
+                                        <option value="Chainmail">Chainmail</option>
+                                        <option value="Splint">Splint</option>
+                                        <option value="Plate">Plate</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="armor_3_hp" placeholder="HP"></td>
+                                <td><input type="text" id="armor_3_bonus" placeholder="4+block"></td>
+                                <td><input type="text" id="armor_3_dmg" placeholder="Damage"></td>
+                                <td><input type="text" id="armor_3_disadvantage" placeholder="Disadvantage"></td>
+                                <td style="text-align: center;"><input type="checkbox" id="armor_3_broken" onchange="toggleArmorBroken(3)"></td>
+                            </tr>
+                            <tr id="armor_4_row">
+                                <td>
+                                    <select id="armor_4_type">
+                                        <option value="">Hands</option>
+                                        <option value="Cloth Gloves">Cloth Gloves</option>
+                                        <option value="Leather Gloves">Leather Gloves</option>
+                                        <option value="Studded Gloves">Studded Gloves</option>
+                                        <option value="Chain Gloves">Chain Gloves</option>
+                                        <option value="Plate Gauntlets">Plate Gauntlets</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="armor_4_hp" placeholder="HP"></td>
+                                <td><input type="text" id="armor_4_bonus" placeholder="4+block"></td>
+                                <td><input type="text" id="armor_4_dmg" placeholder="Damage"></td>
+                                <td><input type="text" id="armor_4_disadvantage" placeholder="Disadvantage"></td>
+                                <td style="text-align: center;"><input type="checkbox" id="armor_4_broken" onchange="toggleArmorBroken(4)"></td>
+                            </tr>
+                            <tr id="armor_5_row">
+                                <td>
+                                    <select id="armor_5_type">
+                                        <option value="">Legs</option>
+                                        <option value="Cloth Pants">Cloth Pants</option>
+                                        <option value="Leather Greaves">Leather Greaves</option>
+                                        <option value="Studded Greaves">Studded Greaves</option>
+                                        <option value="Chain Greaves">Chain Greaves</option>
+                                        <option value="Plate Greaves">Plate Greaves</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="armor_5_hp" placeholder="HP"></td>
+                                <td><input type="text" id="armor_5_bonus" placeholder="4+block"></td>
+                                <td><input type="text" id="armor_5_dmg" placeholder="Damage"></td>
+                                <td><input type="text" id="armor_5_disadvantage" placeholder="Disadvantage"></td>
+                                <td style="text-align: center;"><input type="checkbox" id="armor_5_broken" onchange="toggleArmorBroken(5)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Armor datalist -->
+                <datalist id="armor-list">
+                    <option value="Padded">
+                    <option value="Leather">
+                    <option value="Studded Leather">
+                    <option value="Hide">
+                    <option value="Chain Shirt">
+                    <option value="Scale Mail">
+                    <option value="Breastplate">
+                    <option value="Half Plate">
+                    <option value="Ring Mail">
+                    <option value="Chain Mail">
+                    <option value="Splint">
+                    <option value="Plate">
+                </datalist>
+            </div>
+
+            <!-- Weapons -->
+            <div class="section">
+                <h2 class="section-title">Weapons</h2>
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Weapon</th>
+                                <th>Atk Bonus</th>
+                                <th>Damage</th>
+                                <th>Range</th>
+                                <th>Break</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select id="weapon_1_type">
+                                        <option value="">Weapon 1</option>
+                                        <option value="Club">Club</option>
+                                        <option value="Dagger">Dagger</option>
+                                        <option value="Greatclub">Greatclub</option>
+                                        <option value="Handaxe">Handaxe</option>
+                                        <option value="Javelin">Javelin</option>
+                                        <option value="Light Hammer">Light Hammer</option>
+                                        <option value="Mace">Mace</option>
+                                        <option value="Quarterstaff">Quarterstaff</option>
+                                        <option value="Sickle">Sickle</option>
+                                        <option value="Spear">Spear</option>
+                                        <option value="Battleaxe">Battleaxe</option>
+                                        <option value="Flail">Flail</option>
+                                        <option value="Glaive">Glaive</option>
+                                        <option value="Greataxe">Greataxe</option>
+                                        <option value="Greatsword">Greatsword</option>
+                                        <option value="Halberd">Halberd</option>
+                                        <option value="Lance">Lance</option>
+                                        <option value="Longsword">Longsword</option>
+                                        <option value="Maul">Maul</option>
+                                        <option value="Morningstar">Morningstar</option>
+                                        <option value="Pike">Pike</option>
+                                        <option value="Rapier">Rapier</option>
+                                        <option value="Scimitar">Scimitar</option>
+                                        <option value="Shortsword">Shortsword</option>
+                                        <option value="Trident">Trident</option>
+                                        <option value="War Pick">War Pick</option>
+                                        <option value="Warhammer">Warhammer</option>
+                                        <option value="Whip">Whip</option>
+                                        <option value="Crossbow (Light)">Crossbow (Light)</option>
+                                        <option value="Dart">Dart</option>
+                                        <option value="Shortbow">Shortbow</option>
+                                        <option value="Sling">Sling</option>
+                                        <option value="Blowgun">Blowgun</option>
+                                        <option value="Crossbow (Hand)">Crossbow (Hand)</option>
+                                        <option value="Crossbow (Heavy)">Crossbow (Heavy)</option>
+                                        <option value="Longbow">Longbow</option>
+                                        <option value="Net">Net</option>
+                                        <option value="Falchion">Falchion</option>
+                                        <option value="Claymore">Claymore</option>
+                                        <option value="Katana">Katana</option>
+                                        <option value="Guisarme">Guisarme</option>
+                                        <option value="Scythe">Scythe</option>
+                                        <option value="Throwing Axe">Throwing Axe</option>
+                                        <option value="Chakram">Chakram</option>
+                                        <option value="Flamberge">Flamberge</option>
+                                        <option value="Bone Club">Bone Club</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" id="weapon_1_atk" placeholder="+X"></td>
+                                <td><input type="text" id="weapon_1_dmg" placeholder="1d8"></td>
+                                <td><input type="text" id="weapon_1_range" placeholder="Range"></td>
+                                <td><input type="text" id="weapon_1_break" placeholder="Break"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="weapon_2_type">
+                                        <option value="">Weapon 2</option>
+                                        <option value="Club">Club</option>
+                                        <option value="Dagger">Dagger</option>
+                                        <option value="Greatclub">Greatclub</option>
+                                        <option value="Handaxe">Handaxe</option>
+                                        <option value="Javelin">Javelin</option>
+                                        <option value="Light Hammer">Light Hammer</option>
+                                        <option value="Mace">Mace</option>
+                                        <option value="Quarterstaff">Quarterstaff</option>
+                                        <option value="Sickle">Sickle</option>
+                                        <option value="Spear">Spear</option>
+                                        <option value="Battleaxe">Battleaxe</option>
+                                        <option value="Flail">Flail</option>
+                                        <option value="Glaive">Glaive</option>
+                                        <option value="Greataxe">Greataxe</option>
+                                        <option value="Greatsword">Greatsword</option>
+                                        <option value="Halberd">Halberd</option>
+                                        <option value="Lance">Lance</option>
+                                        <option value="Longsword">Longsword</option>
+                                        <option value="Maul">Maul</option>
+                                        <option value="Morningstar">Morningstar</option>
+                                        <option value="Pike">Pike</option>
+                                        <option value="Rapier">Rapier</option>
+                                        <option value="Scimitar">Scimitar</option>
+                                        <option value="Shortsword">Shortsword</option>
+                                        <option value="Trident">Trident</option>
+                                        <option value="War Pick">War Pick</option>
+                                        <option value="Warhammer">Warhammer</option>
+                                        <option value="Whip">Whip</option>
+                                        <option value="Crossbow (Light)">Crossbow (Light)</option>
+                                        <option value="Dart">Dart</option>
+                                        <option value="Shortbow">Shortbow</option>
+                                        <option value="Sling">Sling</option>
+                                        <option value="Blowgun">Blowgun</option>
+                                        <option value="Crossbow (Hand)">Crossbow (Hand)</option>
+                                        <option value="Crossbow (Heavy)">Crossbow (Heavy)</option>
+                                        <option value="Longbow">Longbow</option>
+                                        <option value="Net">Net</option>
+                                        <option value="Falchion">Falchion</option>
+                                        <option value="Claymore">Claymore</option>
+                                        <option value="Katana">Katana</option>
+                                        <option value="Guisarme">Guisarme</option>
+                                        <option value="Scythe">Scythe</option>
+                                        <option value="Throwing Axe">Throwing Axe</option>
+                                        <option value="Chakram">Chakram</option>
+                                        <option value="Flamberge">Flamberge</option>
+                                        <option value="Bone Club">Bone Club</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" id="weapon_2_atk" placeholder="+X"></td>
+                                <td><input type="text" id="weapon_2_dmg" placeholder="1d6"></td>
+                                <td><input type="text" id="weapon_2_range" placeholder="Range"></td>
+                                <td><input type="text" id="weapon_2_break" placeholder="Break"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="weapon_3_type">
+                                        <option value="">Weapon 3</option>
+                                        <option value="Club">Club</option>
+                                        <option value="Dagger">Dagger</option>
+                                        <option value="Greatclub">Greatclub</option>
+                                        <option value="Handaxe">Handaxe</option>
+                                        <option value="Javelin">Javelin</option>
+                                        <option value="Light Hammer">Light Hammer</option>
+                                        <option value="Mace">Mace</option>
+                                        <option value="Quarterstaff">Quarterstaff</option>
+                                        <option value="Sickle">Sickle</option>
+                                        <option value="Spear">Spear</option>
+                                        <option value="Battleaxe">Battleaxe</option>
+                                        <option value="Flail">Flail</option>
+                                        <option value="Glaive">Glaive</option>
+                                        <option value="Greataxe">Greataxe</option>
+                                        <option value="Greatsword">Greatsword</option>
+                                        <option value="Halberd">Halberd</option>
+                                        <option value="Lance">Lance</option>
+                                        <option value="Longsword">Longsword</option>
+                                        <option value="Maul">Maul</option>
+                                        <option value="Morningstar">Morningstar</option>
+                                        <option value="Pike">Pike</option>
+                                        <option value="Rapier">Rapier</option>
+                                        <option value="Scimitar">Scimitar</option>
+                                        <option value="Shortsword">Shortsword</option>
+                                        <option value="Trident">Trident</option>
+                                        <option value="War Pick">War Pick</option>
+                                        <option value="Warhammer">Warhammer</option>
+                                        <option value="Whip">Whip</option>
+                                        <option value="Crossbow (Light)">Crossbow (Light)</option>
+                                        <option value="Dart">Dart</option>
+                                        <option value="Shortbow">Shortbow</option>
+                                        <option value="Sling">Sling</option>
+                                        <option value="Blowgun">Blowgun</option>
+                                        <option value="Crossbow (Hand)">Crossbow (Hand)</option>
+                                        <option value="Crossbow (Heavy)">Crossbow (Heavy)</option>
+                                        <option value="Longbow">Longbow</option>
+                                        <option value="Net">Net</option>
+                                        <option value="Falchion">Falchion</option>
+                                        <option value="Claymore">Claymore</option>
+                                        <option value="Katana">Katana</option>
+                                        <option value="Guisarme">Guisarme</option>
+                                        <option value="Scythe">Scythe</option>
+                                        <option value="Throwing Axe">Throwing Axe</option>
+                                        <option value="Chakram">Chakram</option>
+                                        <option value="Flamberge">Flamberge</option>
+                                        <option value="Bone Club">Bone Club</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" id="weapon_3_atk" placeholder="+X"></td>
+                                <td><input type="text" id="weapon_3_dmg" placeholder="1d4"></td>
+                                <td><input type="text" id="weapon_3_range" placeholder="Range"></td>
+                                <td><input type="text" id="weapon_3_break" placeholder="Break"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Weapon datalist for autocomplete -->
+                <datalist id="weapons-list">
+                    <option value="Club">
+                    <option value="Dagger">
+                    <option value="Greatclub">
+                    <option value="Handaxe">
+                    <option value="Javelin">
+                    <option value="Light Hammer">
+                    <option value="Mace">
+                    <option value="Quarterstaff">
+                    <option value="Sickle">
+                    <option value="Spear">
+                    <option value="Battleaxe">
+                    <option value="Flail">
+                    <option value="Glaive">
+                    <option value="Greataxe">
+                    <option value="Greatsword">
+                    <option value="Halberd">
+                    <option value="Lance">
+                    <option value="Longsword">
+                    <option value="Maul">
+                    <option value="Morningstar">
+                    <option value="Pike">
+                    <option value="Rapier">
+                    <option value="Scimitar">
+                    <option value="Shortsword">
+                    <option value="Trident">
+                    <option value="War Pick">
+                    <option value="Warhammer">
+                    <option value="Whip">
+                    <option value="Crossbow (Light)">
+                    <option value="Dart">
+                    <option value="Shortbow">
+                    <option value="Sling">
+                    <option value="Blowgun">
+                    <option value="Crossbow (Hand)">
+                    <option value="Crossbow (Heavy)">
+                    <option value="Longbow">
+                    <option value="Net">
+                    <option value="Falchion">
+                    <option value="Claymore">
+                    <option value="Katana">
+                    <option value="Guisarme">
+                    <option value="Scythe">
+                    <option value="Throwing Axe">
+                    <option value="Chakram">
+                    <option value="Flamberge">
+                    <option value="Bone Club">
+                </datalist>
+            </div>
+
+            <!-- Equipment -->
+            <div class="section">
+                <h2 class="section-title">Equipment</h2>
+                <div class="grid grid-3">
+                    <div class="field-group">
+                        <label>Equipment 1</label>
+                        <input type="text" id="equipment_1" placeholder="Equipment 1">
+                    </div>
+                    <div class="field-group">
+                        <label>Equipment 2</label>
+                        <input type="text" id="equipment_2" placeholder="Equipment 2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Injuries Section -->
+            <div class="section">
+                <div style="padding: 15px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px;">
+                    <h2 class="section-title" style="color: #ef4444; margin-bottom: 10px;">Injuries</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem;">
+                        If injured you get to use Bonus while Injured (+1D10)
+                    </p>
+                    <div class="field-group" style="margin-bottom: 15px;">
+                        <label>Injury Details</label>
+                        <textarea id="injuries_text" placeholder="Describe injuries..." style="width: 100%; min-height: 60px;"></textarea>
+                    </div>
+
+                    <!-- Bleed and Weakened Sliders (side by side) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <!-- Bleed Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span style="color: #ef4444;">Bleed per Round</span>
+                                <span id="bleed-value" style="color: #ef4444;">0</span>
+                            </div>
+                            <input type="range" id="bleed_slider" min="0" max="6" value="0">
+                            <!-- Bleed warning at 6 -->
+                            <div id="bleed-warning" style="display: none; margin-top: 10px; padding: 10px; background: rgba(239, 68, 68, 0.2); border: 2px solid #ef4444; border-radius: 5px; color: #fca5a5; font-size: 0.9rem;">
+                                <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Maximum Bleeding!</strong><br>
+                                Roll 1D6 per turn:<br>
+                                • 1-2: Death<br>
+                                • 3-4: Lose 2 HP<br>
+                                • 5-6: Lose 1 HP
+                            </div>
+                        </div>
+
+                        <!-- Weakened Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span style="color: #ef4444;">Weakened per Round</span>
+                                <span id="weakened-value" style="color: #ef4444;">0</span>
+                            </div>
+                            <input type="range" id="weakened_slider" min="0" max="6" value="0">
+                            <!-- Weakened warning at 6 -->
+                            <div id="weakened-warning" style="display: none; margin-top: 10px; padding: 10px; background: rgba(239, 68, 68, 0.2); border: 2px solid #ef4444; border-radius: 5px; color: #fca5a5; font-size: 0.9rem;">
+                                <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Exhausted!</strong><br>
+                                Roll 1D10 + Toughness:<br>
+                                • 1-2: Death<br>
+                                • 3-5: Fainting<br>
+                                • 6-10: Can move but cannot fight
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Spells & Abilities -->
+        <div id="page-spells" class="tab-content">
+            <!-- Spells -->
+            <div class="section">
+                <h2 class="section-title">Spells & Abilities</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 10px; font-size: 0.9rem;">
+                    Check: Arkana + 1D10 minimum 1 success
+                </p>
+                <div class="table-section">
+                    <table>
+                        <thead id="spells-table-header">
+                            <tr>
+                                <th>Type</th>
+                                <th id="spell-column-2" style="color: var(--primary-purple);">Arcana Cost</th>
+                                <th id="spell-column-3" style="color: var(--accent-gold); display: none;">Gain</th>
+                                <th id="spell-column-4" style="color: #ef4444;">Weakened Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody id="spells-table">
+                            <!-- JavaScript will populate -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Arcana Slider -->
+                <div class="slider-container" style="margin-top: 25px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 1px solid rgba(168, 85, 247, 0.4); box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);">
+                    <div class="slider-label">
+                        <span style="color: var(--primary-purple); font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">Arcana</span>
+                        <span id="arcana-value-display" style="color: var(--primary-purple);">0 / 16</span>
+                    </div>
+                    <input type="range" id="arcana_slider" min="0" max="16" value="0" disabled>
+                    <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem; font-style: italic;">
+                        Regen 1/round or 2/rest
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Consumables -->
+        <div id="page-consumables" class="tab-content">
+            <!-- Consumables -->
+            <div class="section">
+                <h2 class="section-title">Consumables</h2>
+                <div class="grid grid-2">
+                    <div>
+                        <h3 style="color: var(--primary-green); margin-bottom: 10px;">Food & Water</h3>
+                        <div class="field-group">
+                            <input type="text" id="food_water_1" placeholder="e.g., 1D10 rations">
+                        </div>
+                        <div class="field-group">
+                            <input type="text" id="food_water_2" placeholder="e.g., Water flask">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--primary-green); margin-bottom: 10px;">Potions</h3>
+
+                        <!-- Adrenaline Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Adrenaline (ignore 1 HP dmg/shot)</span>
+                                <span id="pot-adrenaline-value">3</span>
+                            </div>
+                            <input type="range" id="pot_adrenaline_slider" min="1" max="3" value="3">
+                        </div>
+
+                        <!-- Antidote Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Antidote (halts poison 1 rnd/shot)</span>
+                                <span id="pot-antidote-value">3</span>
+                            </div>
+                            <input type="range" id="pot_antidote_slider" min="1" max="3" value="3">
+                        </div>
+
+                        <!-- Poison Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Poison (1 HP dmg/shot/round)</span>
+                                <span id="pot-poison-value">3</span>
+                            </div>
+                            <input type="range" id="pot_poison_slider" min="1" max="3" value="3">
+                        </div>
+
+                        <!-- Arcane Elixir Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Arcane Elixir (10 arcana/shot)</span>
+                                <span id="pot-arcane-value">0</span>
+                            </div>
+                            <input type="range" id="pot_arcane_slider" min="0" max="4" value="0">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--primary-blue); margin-bottom: 10px;">Arrows</h3>
+                        <div class="field-group">
+                            <input type="text" id="arrows" placeholder="e.g., 1D10 arrows">
+                        </div>
+
+                        <!-- Poison Arrows Slider -->
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Poison Arrows</span>
+                                <span id="poison-arrow-value">0</span>
+                            </div>
+                            <input type="range" id="poison_arrow_slider" min="0" max="6" value="0">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--accent-gold); margin-bottom: 10px;">Money</h3>
+                        <div class="field-group">
+                            <label>Gold</label>
+                            <input type="number" id="gold" placeholder="0">
+                        </div>
+                        <div class="field-group">
+                            <label>Silver</label>
+                            <input type="number" id="silver" placeholder="0">
+                        </div>
+                        <div class="field-group">
+                            <label>Copper</label>
+                            <input type="number" id="copper" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Inventory & Notes -->
+        <div id="page-inventory" class="tab-content">
+            <!-- Inventory and Reminders Grid -->
+            <div class="section">
+                <div class="inventory-grid">
+                    <!-- Inventory Column -->
+                    <div class="inventory-column">
+                        <h2 class="section-title">Inventory (10 items)</h2>
+                        <div id="inventory-container"></div>
+                    </div>
+
+                    <!-- Reminders Column -->
+                    <div class="inventory-column">
+                        <h2 class="section-title">Reminders</h2>
+                        <div id="reminders-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Freetext Sections -->
+            <div class="section">
+                <div class="inventory-grid">
+                    <!-- Additional Inventory (Freetext) -->
+                    <div class="inventory-column">
+                        <h2 class="section-title">Additional Inventory</h2>
+                        <textarea id="inventory_freetext" placeholder="Additional items, equipment, or gear..." rows="10"></textarea>
+                    </div>
+
+                    <!-- Notes (Freetext) -->
+                    <div class="inventory-column">
+                        <h2 class="section-title">Notes</h2>
+                        <textarea id="notes_freetext" placeholder="Quest notes, NPC information, story details..." rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Dices -->
+        <div id="page-dices" class="tab-content">
+            <div class="section" style="padding: 15px;">
+                <h2 class="section-title" style="font-size: 1.2rem; margin-bottom: 10px; padding-bottom: 5px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></svg> Dice Roller</h2>
+
+                <!-- Roll Mode Selector -->
+                <div style="margin-bottom: 12px; padding: 12px 15px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(59, 158, 255, 0.1) 100%); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 8px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                    <label for="roll-mode" style="color: var(--accent-gold); font-size: 0.9rem; font-weight: 600;">
+                        Roll Mode:
+                    </label>
+                    <select id="roll-mode" style="font-size: 0.9rem; padding: 8px 12px; flex: 1; min-width: 200px; border: 1px solid rgba(168, 85, 247, 0.4); background: rgba(10, 10, 15, 0.8);">
+                        <option value="successes">Successes (Ability/Spell Checks)</option>
+                        <option value="initiative">Initiative (Turn Order)</option>
+                        <option value="food-water">Food & Water (Daily Survival)</option>
+                        <option value="arrows">Arrows (Post-Battle)</option>
+                    </select>
+                    <p id="mode-description" style="color: var(--text-secondary); font-style: italic; font-size: 0.8rem; margin: 0; width: 100%;">
+                        Roll 1D10 per ability point. 6-7 = barely, 8-9 = success, 10 = critical (reroll)
+                    </p>
+                </div>
+
+                <!-- Dice Sliders (for Successes mode) -->
+                <div id="dice-sliders-successes" class="dice-sliders-container">
+                    <!-- d10 -->
+                    <div class="dice-slider-item">
+                        <div class="slider-label">
+                            <span>d10</span>
+                            <span id="d10-count">0</span>
+                        </div>
+                        <input type="range" id="d10-slider" min="0" max="10" value="0">
+                    </div>
+
+                    <!-- d12 -->
+                    <div class="dice-slider-item">
+                        <div class="slider-label">
+                            <span>d12</span>
+                            <span id="d12-count">0</span>
+                        </div>
+                        <input type="range" id="d12-slider" min="0" max="10" value="0">
+                    </div>
+
+                    <!-- d20 -->
+                    <div class="dice-slider-item">
+                        <div class="slider-label">
+                            <span>d20</span>
+                            <span id="d20-count">0</span>
+                        </div>
+                        <input type="range" id="d20-slider" min="0" max="10" value="0">
+                    </div>
+                </div>
+
+                <!-- Initiative/Arrows selectors (single die) -->
+                <div id="dice-selector-single" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <span style="color: var(--text-secondary); font-style: italic; font-size: 0.9rem;">Select die:</span>
+                        <button id="select-d6-single" class="dice-select-btn" onclick="selectSingleDie('d6')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2"/><path d="M6 18h.01"/><path d="M10 14h.01"/></svg> D6</button>
+                        <button id="select-d10-single" class="dice-select-btn" onclick="selectSingleDie('d10')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2"/><path d="M6 18h.01"/><path d="M10 14h.01"/></svg> D10</button>
+                        <span id="selected-die-display" style="color: var(--accent-gold); font-size: 1rem;">Selected: None</span>
+                    </div>
+                </div>
+
+                <!-- Food & Water dual roll -->
+                <div id="dice-selector-food-water" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div style="padding: 10px; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--primary-blue); border-radius: 8px; text-align: center;">
+                            <span style="color: var(--primary-blue); font-weight: bold; margin-right: 10px;">Food:</span>
+                            <button id="select-d6-food" class="dice-select-btn" onclick="selectFoodWaterDie('food', 'd6')" style="padding: 5px 12px; font-size: 0.85rem;">D6</button>
+                            <button id="select-d10-food" class="dice-select-btn" onclick="selectFoodWaterDie('food', 'd10')" style="padding: 5px 12px; font-size: 0.85rem;">D10</button>
+                            <span id="food-die-display" style="color: var(--accent-gold); margin-left: 10px; font-size: 0.9rem;">None</span>
+                        </div>
+                        <div style="padding: 10px; background: rgba(139, 92, 246, 0.1); border: 1px solid var(--primary-purple); border-radius: 8px; text-align: center;">
+                            <span style="color: var(--primary-purple); font-weight: bold; margin-right: 10px;">Water:</span>
+                            <button id="select-d6-water" class="dice-select-btn" onclick="selectFoodWaterDie('water', 'd6')" style="padding: 5px 12px; font-size: 0.85rem;">D6</button>
+                            <button id="select-d10-water" class="dice-select-btn" onclick="selectFoodWaterDie('water', 'd10')" style="padding: 5px 12px; font-size: 0.85rem;">D10</button>
+                            <span id="water-die-display" style="color: var(--accent-gold); margin-left: 10px; font-size: 0.9rem;">None</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roll Button -->
+                <div style="text-align: center; margin: 15px 0;">
+                    <button id="roll-dice-btn" onclick="rollAllDice()" style="font-size: 1.1rem; padding: 14px 40px; background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-blue) 100%); border: none; box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></svg> Roll Dice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="dice-results-section" class="section" style="display: none; padding: 15px;">
+                <h2 class="section-title" style="font-size: 1.2rem; margin-bottom: 10px;">Results</h2>
+
+                <!-- Success Summary -->
+                <div id="success-summary" style="margin-bottom: 15px; padding: 15px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(59, 158, 255, 0.15) 100%); border: 2px solid var(--primary-purple); border-radius: 10px; text-align: center; box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);">
+                    <h3 style="color: var(--accent-gold); font-size: 1.4rem; margin-bottom: 5px; text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);">
+                        Total Successes: <span id="total-successes">0</span>
+                    </h3>
+                    <h3 style="color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 5px;">
+                        Total Barely Successes: <span id="total-barely">0</span>
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                        <span id="success-breakdown"></span>
+                    </p>
+                </div>
+
+                <!-- Reroll Buttons -->
+                <div id="reroll-buttons-container" style="display: none; text-align: center; margin-bottom: 12px; padding: 10px; background: rgba(251, 191, 36, 0.1); border: 2px solid var(--accent-gold); border-radius: 8px;">
+                    <span style="color: var(--accent-gold); font-size: 1rem; margin-right: 10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align: text-bottom;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Critical Hits!</span>
+                    <!-- Buttons will be dynamically added here -->
+                </div>
+
+                <!-- Individual Dice Results -->
+                <div id="dice-results-container"></div>
+            </div>
+        </div>
+
+        <!-- Page: Rules -->
+        <div id="page-rules" class="tab-content">
+            <div class="section">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    Aedelore Quick Reference
+                </h2>
+
+                <div class="rules-accordion">
+                    <details class="rules-section" open>
+                        <summary>Core Dice System (D10)</summary>
+                        <div class="rules-content">
+                            <p><strong>Dice Pool:</strong> Each ability point = 1D10</p>
+                            <p><strong>Dice Allocation:</strong></p>
+                            <ul>
+                                <li>1-2 points: 1 die</li>
+                                <li>3-4 points: 2 dice</li>
+                                <li>5-6 points: 3 dice</li>
+                                <li>6-7 points: 4 dice</li>
+                                <li>8-9 points: 5 dice</li>
+                                <li>10+ points: 6 dice</li>
+                            </ul>
+                            <p><strong style="color: #ef4444;">Maximum 8 dice per action</strong> unless a special class ability allows exceeding this limit.</p>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Success Levels</summary>
+                        <div class="rules-content">
+                            <ul>
+                                <li><strong>1-5:</strong> Failure</li>
+                                <li><strong>6-7:</strong> Barely a success (minimal effect)</li>
+                                <li><strong>8-9:</strong> Success (intended goal achieved)</li>
+                                <li><strong>10:</strong> Critical success (exceeds expectations; roll again for possible bonus)</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Combat</summary>
+                        <div class="rules-content">
+                            <p><strong>Initiative:</strong> Roll D6 to determine turn order (D10 if 6+ players)</p>
+                            <p><strong>Attack Roll:</strong> Core ability + Skill + Weapon attack bonus (Max 8 dice)</p>
+                            <ul>
+                                <li><strong>0 successes:</strong> Miss</li>
+                                <li><strong>1 success:</strong> Glancing blow (50% damage)</li>
+                                <li><strong>2+ successes:</strong> Full damage</li>
+                            </ul>
+                            <p><strong>Damage:</strong> Roll 1D10 + weapon damage bonus</p>
+                            <p><strong>Defense Options:</strong></p>
+                            <ul>
+                                <li><strong>Dodging:</strong> Dexterity roll</li>
+                                <li><strong>Parrying:</strong> Strength + weapon</li>
+                                <li><strong>Blocking:</strong> Strength + shield</li>
+                                <li><strong>Taking the hit:</strong> Strength + armor to reduce damage</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Abilities & Spells</summary>
+                        <div class="rules-content">
+                            <p>Roll 1D10 per ability point. At least one success required to activate.</p>
+                            <p><strong>Melee Classes</strong> (Warrior, Thief, Hunter, Outcast):</p>
+                            <ul>
+                                <li>Use abilities with <strong>Weakened cost</strong></li>
+                            </ul>
+                            <p><strong>Magic Classes</strong> (Mage, Druid):</p>
+                            <ul>
+                                <li>Cast spells with <strong>Arcana cost</strong></li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Arcana (Magic Resource)</summary>
+                        <div class="rules-content">
+                            <p><strong>Maximum Arcana:</strong></p>
+                            <ul>
+                                <li><strong>Mage:</strong> Max 20, starts at 10</li>
+                                <li><strong>Druid:</strong> Max 16, starts at 8</li>
+                            </ul>
+                            <p><strong>Regeneration:</strong></p>
+                            <ul>
+                                <li>+1 Arcana per combat round</li>
+                                <li>+2 Arcana per rest</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Exhaustion & Bleeding</summary>
+                        <div class="rules-content">
+                            <p><strong>Weakened (Exhaustion):</strong> Characters have 6 weakened points.</p>
+                            <p>When exhausted, roll 1D10 + Toughness:</p>
+                            <ul>
+                                <li><strong>1-2:</strong> Death</li>
+                                <li><strong>3-5:</strong> Fainting</li>
+                                <li><strong>6-10:</strong> Can move but cannot fight</li>
+                            </ul>
+                            <p><strong>Bleeding:</strong> Roll 1D6 per turn:</p>
+                            <ul>
+                                <li><strong>1-2:</strong> Death</li>
+                                <li><strong>3-4:</strong> Lose 2 HP</li>
+                                <li><strong>5-6:</strong> Lose 1 HP</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Assisting Another Player</summary>
+                        <div class="rules-content">
+                            <p>A character may forfeit their turn to grant <strong>+1 additional D10</strong> to another player's related action, with DM approval.</p>
+                        </div>
+                    </details>
+
+                    <details class="rules-section">
+                        <summary>Character Creation</summary>
+                        <div class="rules-content">
+                            <p><strong>Starting Points:</strong></p>
+                            <ul>
+                                <li><strong>Attributes:</strong> 20 points to distribute</li>
+                                <li><strong>Skills:</strong> 10 points to distribute</li>
+                            </ul>
+                            <p><strong>Starting HP:</strong> Based on class and Toughness attribute</p>
+                            <p><strong>Starting Equipment:</strong> Varies by class</p>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="rules-links">
+                    <a href="https://wiki.aedelore.nu/books/miscs-of-aedelore/page/rules" target="_blank" class="rules-link">Aedelore Wiki - Rules</a>
+                    <a href="https://wiki.aedelore.nu/books/miscs-of-aedelore" target="_blank" class="rules-link">Complete Lore & Classes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page: Help -->
+        <div id="page-help" class="tab-content">
+            <div class="section">
+                <h2 class="section-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> How to Use This Character Sheet</h2>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Local Saving</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 10px;">
+                        Your character data is saved locally in two ways:
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; margin-left: 20px;">
+                        <li><strong>Auto-save:</strong> Every 30 seconds, your data is automatically saved to your browser's localStorage</li>
+                        <li><strong>Manual save:</strong> Click "Save Local" to save immediately to your browser</li>
+                    </ul>
+                    <p style="color: var(--primary-blue); margin-top: 10px; font-style: italic;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Local saves are stored in your browser only - clearing cookies/cache will delete them!
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 30px; padding: 15px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--primary-green); border-radius: 8px;">
+                    <h3 style="color: var(--primary-green); margin-bottom: 10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg> Server Saving (Recommended)</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 10px;">
+                        Create an account to save your characters on the server. This allows you to access your characters from any device!
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 10px;">
+                        <strong style="color: var(--accent-gold);">How to use:</strong>
+                    </p>
+                    <ol style="color: var(--text-secondary); line-height: 1.8; margin-left: 20px; margin-bottom: 15px;">
+                        <li>Click "Login" and register a new account (or login if you have one)</li>
+                        <li>Click "Save" (cloud) to save your current character</li>
+                        <li>Click "Load" (cloud) to see and load your saved characters</li>
+                    </ol>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 10px;">
+                        <strong style="color: var(--accent-gold);">What gets saved to the server:</strong>
+                    </p>
+                    <ul style="color: var(--text-secondary); line-height: 1.8; margin-left: 20px;">
+                        <li>Character name, player name, race, class, and religion</li>
+                        <li>All attributes (Strength, Agility, Intelligence, etc.)</li>
+                        <li>HP, Willpower, Armor Class, and combat stats</li>
+                        <li>All equipped weapons and armor (including broken status)</li>
+                        <li>All spells and abilities</li>
+                        <li>Consumables (potions, rations, torches, etc.)</li>
+                        <li>Full inventory and notes/reminders</li>
+                        <li>Backstory and character description</li>
+                    </ul>
+                    <p style="color: var(--primary-green); margin-top: 15px; font-style: italic;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Server saves are safe from browser data loss and accessible from any device!
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 20px; padding: 12px; background: rgba(239, 68, 68, 0.15); border-left: 3px solid #ef4444; border-radius: 5px;">
+                    <h3 style="color: #ef4444; margin-bottom: 8px; font-size: 1rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Local Data Loss Warning</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; font-size: 0.95rem;">
+                        <strong style="color: #fca5a5;">Clearing browser cookies/cache will delete LOCAL saves!</strong>
+                        Use server saving or export regularly using "Export" to backup your data.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Backup & Transfer</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 10px;">
+                        To backup your character or move it to another device:
+                    </p>
+                    <ol style="color: var(--text-secondary); line-height: 1.8; margin-left: 20px;">
+                        <li>Click "Export" to download your character as a JSON file</li>
+                        <li>On another device/browser, click "Import" to load it</li>
+                    </ol>
+                </div>
+
+                <div style="text-align: center; padding: 20px; background: rgba(139, 92, 246, 0.1); border: 2px solid var(--primary-purple); border-radius: 8px;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 10px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Need More Information?</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 10px;">
+                        For complete game rules, lore, guides, and additional resources, visit:
+                    </p>
+                    <a href="https://wiki.aedelore.nu" target="_blank" style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; transition: transform 0.3s;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> wiki.aedelore.nu
+                    </a>
+                    <p style="color: var(--text-secondary); margin-top: 15px; font-size: 0.9rem; font-style: italic;">
+                        The wiki contains detailed information about races, classes, spells, items, world lore, and much more!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Data Files -->
+    <script src="data/races.js"></script>
+    <script src="data/classes.js"></script>
+    <script src="data/religions.js"></script>
+    <script src="data/weapons.js"></script>
+    <script src="data/armor.js"></script>
+    <script src="data/spells.js"></script>
+
+    <!-- Load JS Modules -->
+    <script src="js/tabs.js"></script>
+    <script src="js/sliders.js"></script>
+    <script src="js/spells.js"></script>
+    <script src="js/weapons.js"></script>
+    <script src="js/armor.js"></script>
+    <script src="js/diceroller.js"></script>
+    <script src="js/focus-fix.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Multi-System Support -->
+    <script src="js/systems/system-config.js"></script>
+    <script src="js/systems/dnd5e.js"></script>
+    <script src="js/systems/pathfinder2e.js"></script>
+    <script src="js/systems/storyteller.js"></script>
+    <script src="js/systems/cod.js"></script>
+    <script src="js/system-selector.js"></script>
+
+    <script>
+        // Initialize inventory fields (10 items)
+        const inventoryContainer = document.getElementById('inventory-container');
+        for (let i = 1; i <= 10; i++) {
+            const fieldGroup = document.createElement('div');
+            fieldGroup.className = 'field-group';
+            fieldGroup.innerHTML = `
+                <label>Item ${i}</label>
+                <input type="text" id="inventory_${i}" placeholder="Item description">
+            `;
+            inventoryContainer.appendChild(fieldGroup);
+        }
+
+        // Initialize reminders fields (10 items)
+        const remindersContainer = document.getElementById('reminders-container');
+        for (let i = 1; i <= 10; i++) {
+            const fieldGroup = document.createElement('div');
+            fieldGroup.className = 'field-group';
+            fieldGroup.innerHTML = `
+                <label>Reminder ${i}</label>
+                <input type="text" id="reminder_${i}" placeholder="Important reminder">
+            `;
+            remindersContainer.appendChild(fieldGroup);
+        }
+
+        // Function to build spells table with dynamic number of rows
+        function buildSpellsTable(numSpells) {
+            const spellsTable = document.getElementById('spells-table');
+
+            // Clear existing table
+            spellsTable.innerHTML = '';
+
+            for (let i = 1; i <= numSpells; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><select id="spell_${i}_type"><option value="">Spell/Ability ${i}</option></select></td>
+                    <td><input type="text" id="spell_${i}_arcana" placeholder="Cost"></td>
+                    <td id="spell_${i}_gain_cell" style="display: none;"><input type="text" id="spell_${i}_gain" placeholder="Gain"></td>
+                    <td><input type="text" id="spell_${i}_weakened" placeholder="Damage"></td>
+                `;
+                spellsTable.appendChild(row);
+
+                // Create info box row for this spell
+                const infoRow = document.createElement('tr');
+                infoRow.id = `spell_${i}_info_row`;
+                infoRow.style.display = 'none';
+                infoRow.innerHTML = `
+                    <td colspan="4" style="padding: 0;">
+                        <div id="spell_${i}_info_box" style="padding: 15px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; margin: 5px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <h4 id="spell_${i}_info_name" style="color: var(--primary-blue); margin: 0 0 10px 0; font-size: 1.1rem;"></h4>
+                                    <p id="spell_${i}_info_desc" style="color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.5;"></p>
+                                    <div id="spell_${i}_info_check" style="color: var(--accent-gold); font-style: italic; font-size: 0.9rem; margin-top: 10px; padding: 8px; background: rgba(251, 191, 36, 0.1); border-radius: 4px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                spellsTable.appendChild(infoRow);
+            }
+
+            console.log(`Spells table built with ${numSpells} rows`);
+
+            // Setup event listeners for all spell selects
+            if (typeof setupSpellListeners === 'function') {
+                setupSpellListeners(numSpells);
+            }
+
+            // Update spell dropdowns to populate with class spells
+            if (typeof updateSpellsList === 'function') {
+                updateSpellsList();
+            }
+        }
+
+        // Initialize spells table with 5 rows by default
+        buildSpellsTable(5);
+
+        // Function to show spell info box for a specific index
+        function showSpellInfo(spell, spellIndex) {
+            const infoRow = document.getElementById(`spell_${spellIndex}_info_row`);
+            const nameEl = document.getElementById(`spell_${spellIndex}_info_name`);
+            const descEl = document.getElementById(`spell_${spellIndex}_info_desc`);
+            const checkEl = document.getElementById(`spell_${spellIndex}_info_check`);
+
+            if (!infoRow) return;
+
+            const selectedClass = document.getElementById('class').value;
+            const isConjurer = selectedClass && CLASSES && CLASSES[selectedClass] && CLASSES[selectedClass].abilityType === "arcana";
+
+            nameEl.textContent = spell.name;
+            descEl.textContent = spell.desc || '';
+
+            // Add check information
+            if (checkEl) {
+                if (isConjurer) {
+                    // For spells: Show arcane check
+                    checkEl.textContent = 'Check: Arkana + 1D10 minimum 1 success';
+                } else {
+                    // For melee abilities: Use check field which contains the check info
+                    if (spell.check) {
+                        checkEl.textContent = spell.check;
+                    } else {
+                        checkEl.textContent = '';
+                    }
+                }
+            }
+
+            infoRow.style.display = 'table-row';
+        }
+
+        // Mapping of attribute/skill names to field IDs
+        const attributeMapping = {
+            'Strength': 'strength_value',
+            'Dexterity': 'dexterity_value',
+            'Agility': 'dexterity_value', // Alias for Dexterity
+            'Toughness': 'toughness_value',
+            'Intelligence': 'intelligence_value',
+            'Wisdom': 'wisdom_value',
+            'Force of will': 'force_of_will_value',
+            'Athletics': 'strength_athletics',
+            'Raw Power': 'strength_raw_power',
+            'Unarmed': 'strength_unarmed',
+            'Endurance': 'dexterity_endurance',
+            'Acrobatics': 'dexterity_acrobatics',
+            'Sleight of Hand': 'dexterity_sleight_of_hand',
+            'Stealth': 'dexterity_stealth',
+            'Bonus While Injured': 'toughness_bonus_while_injured',
+            'Resistance': 'toughness_resistance',
+            'Arcana': 'intelligence_arcana',
+            'History': 'intelligence_history',
+            'Investigation': 'intelligence_investigation',
+            'Nature': 'intelligence_nature',
+            'Religion': 'intelligence_religion',
+            'Luck': 'wisdom_luck',
+            'Animal Handling': 'wisdom_animal_handling',
+            'Insight': 'wisdom_insight',
+            'Medicine': 'wisdom_medicine',
+            'Perception': 'wisdom_perception',
+            'Survival': 'wisdom_survival',
+            'Deception': 'force_of_will_deception',
+            'Intimidation': 'force_of_will_intimidation',
+            'Performance': 'force_of_will_performance',
+            'Persuasion': 'force_of_will_persuasion'
+        };
+
+        // Function to auto-fill attributes based on race, class, and religion
+        function autoFillAttributes() {
+            // Reset all attribute fields to 0
+            Object.values(attributeMapping).forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) field.value = 0;
+            });
+
+            const raceValue = document.getElementById('race').value;
+            const classValue = document.getElementById('class').value;
+            const religionValue = document.getElementById('religion').value;
+
+            // Apply race bonuses
+            if (raceValue && RACES[raceValue]) {
+                RACES[raceValue].bonuses.forEach(bonus => {
+                    applyBonus(bonus);
+                });
+            }
+
+            // Apply class bonuses
+            if (classValue && CLASSES[classValue]) {
+                CLASSES[classValue].bonuses.forEach(bonus => {
+                    applyBonus(bonus);
+                });
+            }
+
+            // Apply religion bonuses
+            if (religionValue && RELIGIONS[religionValue]) {
+                RELIGIONS[religionValue].bonuses.forEach(bonus => {
+                    applyBonus(bonus);
+                });
+            }
+        }
+
+        // Function to auto-fill gold based on race and class
+        function autoFillGold() {
+            const raceValue = document.getElementById('race').value;
+            const classValue = document.getElementById('class').value;
+            const goldField = document.getElementById('gold');
+
+            if (!goldField) return;
+
+            let totalGold = 0;
+
+            // Add race gold
+            if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment) {
+                totalGold += RACES[raceValue].startingEquipment.gold || 0;
+            }
+
+            // Add class gold
+            if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment) {
+                totalGold += CLASSES[classValue].startingEquipment.gold || 0;
+            }
+
+            goldField.value = totalGold;
+        }
+
+        // Function to auto-fill worthiness based on race, class, and religion
+        function autoFillWorthiness() {
+            const raceValue = document.getElementById('race').value;
+            const classValue = document.getElementById('class').value;
+            const religionValue = document.getElementById('religion').value;
+            const worthinessSlider = document.getElementById('worthiness_slider');
+
+            if (!worthinessSlider) return;
+
+            let totalWorthiness = 0;
+
+            // Add race worthiness
+            if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment) {
+                const raceWorth = RACES[raceValue].startingEquipment.worthiness || 0;
+                console.log(`Race (${raceValue}) worthiness: ${raceWorth}`);
+                totalWorthiness += raceWorth;
+            }
+
+            // Add class worthiness
+            if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment) {
+                const classWorth = CLASSES[classValue].startingEquipment.worthiness || 0;
+                console.log(`Class (${classValue}) worthiness: ${classWorth}`);
+                totalWorthiness += classWorth;
+            }
+
+            // Add religion worthiness bonuses (including negative bonuses)
+            if (religionValue && RELIGIONS[religionValue] && RELIGIONS[religionValue].bonuses) {
+                RELIGIONS[religionValue].bonuses.forEach(bonus => {
+                    console.log(`Checking religion bonus: "${bonus}"`);
+                    const match = bonus.match(/^([+-]\d+)\s+Worthiness$/i);
+                    if (match) {
+                        const bonusValue = parseInt(match[1], 10);
+                        console.log(`Matched worthiness bonus: ${bonusValue}`);
+                        totalWorthiness += bonusValue;
+                    }
+                });
+            }
+
+            console.log(`Total worthiness before clamping: ${totalWorthiness}`);
+
+            // Clamp to slider range (-10 to +10)
+            totalWorthiness = Math.max(-10, Math.min(10, totalWorthiness));
+
+            console.log(`Total worthiness after clamping: ${totalWorthiness}`);
+
+            worthinessSlider.value = totalWorthiness;
+            // Trigger input event to update display
+            worthinessSlider.dispatchEvent(new Event('input'));
+        }
+
+        // Function to auto-fill starting weapon and armor
+        function autoFillStartingEquipment() {
+            const raceValue = document.getElementById('race').value;
+            const classValue = document.getElementById('class').value;
+
+            // Auto-fill starting weapons: Class weapon in slot 1, Race weapon in slot 2
+            let classWeapon = '';
+            let raceWeapon = '';
+
+            if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment && CLASSES[classValue].startingEquipment.weapon) {
+                classWeapon = CLASSES[classValue].startingEquipment.weapon;
+            }
+
+            if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment && RACES[raceValue].startingEquipment.weapon) {
+                raceWeapon = RACES[raceValue].startingEquipment.weapon;
+            }
+
+            // Fill in weapon_1_type with class weapon
+            const weapon1Field = document.getElementById('weapon_1_type');
+            if (weapon1Field && classWeapon) {
+                weapon1Field.value = classWeapon;
+                weapon1Field.dispatchEvent(new Event('change'));
+            }
+
+            // Fill in weapon_2_type with race weapon (only if different from class weapon)
+            const weapon2Field = document.getElementById('weapon_2_type');
+            if (weapon2Field && raceWeapon && raceWeapon !== classWeapon) {
+                weapon2Field.value = raceWeapon;
+                weapon2Field.dispatchEvent(new Event('change'));
+            }
+
+            // Auto-fill starting armor
+            let startingArmor = '';
+            if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment && CLASSES[classValue].startingEquipment.armor) {
+                startingArmor = CLASSES[classValue].startingEquipment.armor;
+            }
+
+            // Fill in armor_3_type (Chest) if we have starting armor
+            const armor3Field = document.getElementById('armor_3_type');
+            if (armor3Field && startingArmor) {
+                armor3Field.value = startingArmor;
+                // Trigger auto-fill for armor stats
+                armor3Field.dispatchEvent(new Event('change'));
+            }
+
+            // Auto-fill starting shield (from race or class)
+            let startingShield = '';
+            if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment && RACES[raceValue].startingEquipment.shield) {
+                startingShield = RACES[raceValue].startingEquipment.shield;
+            } else if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment && CLASSES[classValue].startingEquipment.shield) {
+                startingShield = CLASSES[classValue].startingEquipment.shield;
+            }
+
+            // Fill in shield_type if we have a starting shield
+            const shieldField = document.getElementById('shield_type');
+            if (shieldField && startingShield) {
+                shieldField.value = startingShield;
+                // Trigger auto-fill for shield stats
+                shieldField.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // Function to auto-fill HP based on race
+        function autoFillHP() {
+            const raceValue = document.getElementById('race').value;
+            const hpSlider = document.getElementById('hp_slider');
+            const hpDisplay = document.getElementById('hp-value-display');
+
+            if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment && RACES[raceValue].startingEquipment.hp) {
+                const maxHP = RACES[raceValue].startingEquipment.hp;
+
+                // Set max value and current value to max HP
+                hpSlider.max = maxHP;
+                hpSlider.value = maxHP;
+
+                // Update display
+                hpDisplay.textContent = `${maxHP} / ${maxHP}`;
+
+                // Trigger input event to update colors
+                hpSlider.dispatchEvent(new Event('input'));
+
+                console.log(`HP set to ${maxHP} for race ${raceValue}`);
+            }
+        }
+
+        // Function to auto-fill starting food/water/ammo
+        function autoFillConsumables() {
+            const raceValue = document.getElementById('race').value;
+            const classValue = document.getElementById('class').value;
+
+            // Auto-fill food (prioritize class over race)
+            let foodText = '';
+            if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment && CLASSES[classValue].startingEquipment.food) {
+                foodText = CLASSES[classValue].startingEquipment.food + ' rations';
+            } else if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment && RACES[raceValue].startingEquipment.food) {
+                foodText = RACES[raceValue].startingEquipment.food + ' rations';
+            }
+
+            const foodField = document.getElementById('food_water_1');
+            if (foodField && foodText) {
+                foodField.value = foodText;
+            }
+
+            // Auto-fill ammo/arrows (prioritize class over race)
+            let ammoText = '';
+            if (classValue && CLASSES[classValue] && CLASSES[classValue].startingEquipment && CLASSES[classValue].startingEquipment.ammo) {
+                ammoText = CLASSES[classValue].startingEquipment.ammo;
+            } else if (raceValue && RACES[raceValue] && RACES[raceValue].startingEquipment && RACES[raceValue].startingEquipment.ammo) {
+                ammoText = RACES[raceValue].startingEquipment.ammo;
+            }
+
+            const arrowsField = document.getElementById('arrows');
+            if (arrowsField && ammoText) {
+                arrowsField.value = ammoText;
+            }
+        }
+
+        // Function to auto-fill arcana based on class
+        function autoFillArcana() {
+            const classValue = document.getElementById('class').value;
+            const arcanaSlider = document.getElementById('arcana_slider');
+            const arcanaDisplay = document.getElementById('arcana-value-display');
+
+            if (!arcanaSlider || !arcanaDisplay) return;
+
+            // Check if class is a conjurer (has abilityType: "arcana")
+            const isConjurer = classValue && CLASSES[classValue] && CLASSES[classValue].abilityType === "arcana";
+
+            if (isConjurer) {
+                // Enable slider for conjurers
+                arcanaSlider.disabled = false;
+
+                // Set max mana and starting arcana based on class
+                if (classValue === "Mage") {
+                    arcanaSlider.max = 20;
+                    arcanaSlider.value = 10;
+                } else if (classValue === "Druid") {
+                    arcanaSlider.max = 16;
+                    arcanaSlider.value = 8;
+                } else {
+                    // Other conjurers default to 16 max and start with 0
+                    arcanaSlider.max = 16;
+                    arcanaSlider.value = 0;
+                }
+
+            } else {
+                // Disable slider and set to 0 for non-conjurers
+                arcanaSlider.max = 16;
+                arcanaSlider.disabled = true;
+                arcanaSlider.value = 0;
+            }
+
+            // Update display
+            arcanaDisplay.textContent = `${arcanaSlider.value} / ${arcanaSlider.max}`;
+
+            // Update visual gradient
+            const percentage = (arcanaSlider.value / arcanaSlider.max) * 100;
+            arcanaSlider.style.background = `linear-gradient(to right, var(--primary-purple) ${percentage}%, rgba(139, 92, 246, 0.3) ${percentage}%)`;
+        }
+
+        // Function to apply a single bonus (like "+1 Strength")
+        function applyBonus(bonus) {
+            // Skip if it starts with "Starting" or other non-attribute text
+            if (!bonus.startsWith('+') && !bonus.startsWith('-')) return;
+
+            // Parse the bonus: "+1 Strength" -> value: 1, attribute: "Strength"
+            const match = bonus.match(/^([+-]\d+)\s+(.+)$/);
+            if (!match) return;
+
+            const value = parseInt(match[1]);
+            const attributeName = match[2];
+
+            // Find the field ID for this attribute
+            const fieldId = attributeMapping[attributeName];
+            if (!fieldId) return;
+
+            const field = document.getElementById(fieldId);
+            if (field) {
+                const currentValue = parseInt(field.value) || 0;
+                field.value = currentValue + value;
+            }
+        }
+
+        // Update bonus displays when race/class/religion changes
+        document.getElementById('race').addEventListener('change', function() {
+            const raceBonuses = document.getElementById('race-bonuses');
+            const raceHeader = document.getElementById('race-bonuses-header');
+            if (this.value && RACES[this.value]) {
+                raceHeader.textContent = `${this.value} Bonuses`;
+                raceBonuses.innerHTML = '<ul style="margin: 0; padding-left: 20px;">' +
+                    RACES[this.value].bonuses.map(b => `<li>${b}</li>`).join('') +
+                    '</ul>';
+            } else {
+                raceHeader.textContent = 'Race Bonuses';
+                raceBonuses.innerHTML = '<em>Select a race to see bonuses</em>';
+            }
+            autoFillAttributes();
+            autoFillGold();
+            autoFillWorthiness();
+            autoFillStartingEquipment();
+            autoFillConsumables();
+            autoFillArcana();
+            autoFillHP();
+        });
+
+        document.getElementById('class').addEventListener('change', function() {
+            const classBonuses = document.getElementById('class-bonuses');
+            const classHeader = document.getElementById('class-bonuses-header');
+            if (this.value && CLASSES[this.value]) {
+                classHeader.textContent = `${this.value} Bonuses`;
+                classBonuses.innerHTML = '<ul style="margin: 0; padding-left: 20px;">' +
+                    CLASSES[this.value].bonuses.map(b => `<li>${b}</li>`).join('') +
+                    '</ul>';
+            } else {
+                classHeader.textContent = 'Class Bonuses';
+                classBonuses.innerHTML = '<em>Select a class to see bonuses</em>';
+            }
+
+            // Rebuild spells table based on class
+            let numSpells = 5; // Default for classes without specific data
+            if (this.value && CLASSES[this.value] && CLASSES[this.value].startingEquipment) {
+                // Use spells if defined (for arcana classes), otherwise abilities (for melee classes)
+                numSpells = CLASSES[this.value].startingEquipment.spells ||
+                           CLASSES[this.value].startingEquipment.abilities ||
+                           5;
+            }
+            buildSpellsTable(numSpells);
+
+            autoFillAttributes();
+            autoFillGold();
+            autoFillWorthiness();
+            autoFillStartingEquipment();
+            autoFillConsumables();
+            autoFillArcana();
+        });
+
+        document.getElementById('religion').addEventListener('change', function() {
+            const religionBonuses = document.getElementById('religion-bonuses');
+            const religionHeader = document.getElementById('religion-bonuses-header');
+            if (this.value && RELIGIONS[this.value]) {
+                const religion = RELIGIONS[this.value];
+                religionHeader.textContent = `${this.value} Bonuses`;
+
+                let html = '';
+                // Add deity and description
+                if (religion.deity && religion.description) {
+                    html += `<p style="margin: 10px 0; padding: 10px; background: rgba(139, 92, 246, 0.1); border-radius: 5px; font-style: italic;">
+                        <strong>Deity:</strong> ${religion.deity}<br>
+                        ${religion.description}
+                    </p>`;
+                }
+
+                // Add bonuses list
+                html += '<ul style="margin: 0; padding-left: 20px;">' +
+                    religion.bonuses.map(b => `<li>${b}</li>`).join('') +
+                    '</ul>';
+
+                religionBonuses.innerHTML = html;
+            } else {
+                religionHeader.textContent = 'Religion Bonuses';
+                religionBonuses.innerHTML = '<em>Select a religion to see bonuses</em>';
+            }
+            autoFillAttributes();
+            autoFillWorthiness();
+        });
+
+        // Toggle armor broken state (red background when checked)
+        function toggleArmorBroken(armorIndex) {
+            const checkbox = document.getElementById(`armor_${armorIndex}_broken`);
+            const row = document.getElementById(`armor_${armorIndex}_row`);
+
+            if (checkbox && row) {
+                if (checkbox.checked) {
+                    row.style.background = 'rgba(239, 68, 68, 0.3)';
+                    row.style.borderLeft = '4px solid #ef4444';
+                } else {
+                    row.style.background = '';
+                    row.style.borderLeft = '';
+                }
+            }
+        }
+
+        // Initialize all auto-fill functionality AFTER all DOM elements are created
+        initializeAllAutoFills();
+    </script>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideAuthModal()">&times;</button>
+            <h2 id="auth-modal-title">Login</h2>
+            <div class="modal-form">
+                <div class="field-group">
+                    <label>Username</label>
+                    <input type="text" id="auth-username" placeholder="Enter username">
+                </div>
+                <div class="field-group">
+                    <label>Password</label>
+                    <input type="password" id="auth-password" placeholder="Enter password">
+                </div>
+                <p id="auth-error" class="error-text"></p>
+                <button id="auth-submit-btn" class="modal-submit">Login</button>
+                <p id="auth-toggle-text" class="toggle-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character List Modal -->
+    <div id="character-list-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideCharacterListModal()">&times;</button>
+            <h2>Your Characters</h2>
+            <div id="character-list" class="character-list"></div>
+        </div>
+    </div>
+</body>
+</html>

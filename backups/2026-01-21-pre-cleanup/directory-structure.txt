@@ -1,0 +1,22 @@
+totalt 96
+drwxrwxr-x 13 root root 4096 21 jan 11.59 .
+drwxr-xr-x  6 root root 4096 20 jan 17.12 ..
+drwxrwxr-x  8 root root 4096 20 jan 14.44 android-sdk
+drwxrwxr-x  3 root root 4096 21 jan 15.47 api
+drwxrwxr-x  5 root root 4096 21 jan 18.37 backups
+drwxrwxr-x  2 root root 4096 21 jan 15.37 .claude
+drwxrwxr-x  2 root root 4096 21 jan 15.45 Claude
+-rw-rw-r--  1 root root 1641 21 jan 02.54 CLAUDE.md
+-rw-------  1 root root 1973 21 jan 09.51 compose.yml
+drwxrwxr-x  2 root root 4096 21 jan 11.39 data
+-rwxrwxr-x  1 root root 7606 20 jan 14.45 database-schema.sql
+drwxrwxr-x  2 root root 4096 21 jan 12.00 docs
+-rw-------  1 root root  506 21 jan 11.53 .env
+-rw-rw-r--  1 root root  979 21 jan 11.59 .env.example
+-rw-rw-r--  1 root root  312 21 jan 11.58 .gitignore
+drwxrwxr-x  5 root root 4096 20 jan 14.45 gradle-8.5
+drwxrwxr-x  6 root root 4096 21 jan 18.33 html
+-rw-------  1 root root 4095 21 jan 09.43 nginx.conf
+-rwxrwxr-x  1 root root 8961 21 jan 11.58 RESTORE-INSTRUCTIONS.md
+drwxrwxr-x  2 root root 4096 20 jan 14.45 scripts
+drwxrwxr-x  2 root root 4096 20 jan 16.02 systems
