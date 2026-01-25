@@ -34,3 +34,4 @@ Thumbs.db
 Claude/
 claude/
 CLAUDE.md
+backups/*.sql.gz
