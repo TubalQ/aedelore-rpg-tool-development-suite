@@ -45,7 +45,8 @@ function csrfProtection(req, res, next) {
     }
 
     const cookieToken = req.cookies[CSRF_COOKIE_NAME];
-    const headerToken = req.headers[CSRF_HEADER_NAME];
+    // Accept CSRF token from header OR query param (for sendBeacon which can't set headers)
+    const headerToken = req.headers[CSRF_HEADER_NAME] || req.query.csrf_token;
 
     if (!cookieToken || !headerToken) {
         return res.status(403).json({ error: 'CSRF token missing' });

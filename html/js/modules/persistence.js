@@ -541,10 +541,11 @@ window.addEventListener('pagehide', () => {
         const data = window.getAllFields();
         const characterName = data.character_name || 'Unnamed Character';
         const system = localStorage.getItem('aedelore_selected_system') || 'aedelore';
+        const csrfToken = window.getCsrfToken ? window.getCsrfToken() : '';
 
         const payload = JSON.stringify({ name: characterName, data, system });
         navigator.sendBeacon(
-            `/api/characters/${window.currentCharacterId}?token=${window.authToken}`,
+            `/api/characters/${window.currentCharacterId}?token=${window.authToken}&csrf_token=${csrfToken}`,
             new Blob([payload], { type: 'application/json' })
         );
     }
