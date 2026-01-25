@@ -15,6 +15,18 @@ services:
       timeout: 5s
       retries: 5
 
+  aedelore-dev-redis:
+    image: redis:7-alpine
+    container_name: aedelore-dev-redis
+    restart: unless-stopped
+    volumes:
+      - aedelore-dev-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   aedelore-dev-web:
     image: nginx:alpine
     container_name: aedelore-dev-web
@@ -33,6 +45,7 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@aedelore-dev-db:5432/${POSTGRES_DB}
+      REDIS_URL: redis://aedelore-dev-redis:6379
       SMTP_HOST: ${SMTP_HOST}
       SMTP_PORT: ${SMTP_PORT}
       SMTP_USER: ${SMTP_USER}
@@ -45,6 +58,8 @@ services:
       - "3000"
     depends_on:
       aedelore-dev-db:
+        condition: service_healthy
+      aedelore-dev-redis:
         condition: service_healthy
 
   # Build service for frontend JavaScript minification
@@ -60,3 +75,4 @@ services:
 
 volumes:
   aedelore-dev-pgdata:
+  aedelore-dev-redis:

@@ -97,24 +97,24 @@ router.post('/login', authLimiter, async (req, res) => {
         return res.status(400).json({ error: 'Username and password required' });
     }
 
-    if (isAccountLocked(username)) {
+    if (await isAccountLocked(username)) {
         return res.status(429).json({ error: 'Account temporarily locked. Please try again later.' });
     }
 
     try {
         const user = await db.get('SELECT id, password_hash FROM users WHERE username = $1', [username]);
         if (!user) {
-            recordFailedAttempt(username);
+            await recordFailedAttempt(username);
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
         const valid = await bcrypt.compare(password, user.password_hash);
         if (!valid) {
-            recordFailedAttempt(username);
+            await recordFailedAttempt(username);
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        clearLoginAttempts(username);
+        await clearLoginAttempts(username);
 
         // Log login history
         const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip;
