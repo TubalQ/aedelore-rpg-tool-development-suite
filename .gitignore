@@ -29,3 +29,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Claude AI documentation (internal)
+Claude/
+claude/
+CLAUDE.md
