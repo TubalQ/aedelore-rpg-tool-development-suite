@@ -5,6 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const helmet = require('helmet');
 const db = require('./db');
+const { loggers } = require('./logger');
+
+const log = loggers.server;
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -55,7 +58,7 @@ async function cleanupExpiredTokens() {
             "DELETE FROM auth_tokens WHERE created_at < NOW() - INTERVAL '24 hours'"
         );
     } catch (e) {
-        console.error('Token cleanup error:', e.message);
+        log.error({ err: e }, 'Token cleanup error');
     }
 }
 
@@ -89,7 +92,7 @@ try {
         metrics.errors = saved.errors || 0;
     }
 } catch (e) {
-    console.log('Starting with fresh metrics');
+    log.info('Starting with fresh metrics');
 }
 
 // Request counting middleware
@@ -263,12 +266,12 @@ app.get('/api/csrf-token', (req, res) => {
 async function start() {
     try {
         await db.initialize();
-        console.log('Database initialized');
+        log.info('Database initialized');
 
         await writeMetricsFile();
 
         const server = app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Aedelore API running on port ${PORT}`);
+            log.info({ port: PORT }, 'Aedelore API running');
         });
 
         // Security: Set server timeouts to prevent slowloris/slow POST attacks
@@ -279,7 +282,7 @@ async function start() {
 
         return server;
     } catch (error) {
-        console.error('Failed to start server:', error);
+        log.fatal({ err: error }, 'Failed to start server');
         process.exit(1);
     }
 }

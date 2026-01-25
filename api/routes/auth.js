@@ -5,6 +5,9 @@ const db = require('../db');
 const { sendPasswordResetEmail } = require('../email');
 const { generateToken, generateResetToken, validateUsername, validatePassword, validateEmail } = require('../helpers');
 const { authLimiter, passwordResetLimiter, authenticate, isAccountLocked, recordFailedAttempt, clearLoginAttempts } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.auth;
 
 const SALT_ROUNDS = 10;
 
@@ -80,7 +83,7 @@ router.post('/register', authLimiter, async (req, res) => {
 
         res.json({ success: true, token, userId: result.id });
     } catch (error) {
-        console.error('Register error:', error.message);
+        log.error({ err: error }, 'Register error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -137,7 +140,7 @@ router.post('/login', authLimiter, async (req, res) => {
 
         res.json({ success: true, token, userId: user.id });
     } catch (error) {
-        console.error('Login error:', error.message);
+        log.error({ err: error }, 'Login error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -215,7 +218,7 @@ router.get('/me', authenticate, async (req, res) => {
             }))
         });
     } catch (error) {
-        console.error('Get profile error:', error);
+        log.error({ err: error }, 'Get profile error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -248,7 +251,7 @@ router.put('/account/password', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Password changed successfully' });
     } catch (error) {
-        console.error('Change password error:', error);
+        log.error({ err: error }, 'Change password error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -286,7 +289,7 @@ router.put('/account/email', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Email updated successfully' });
     } catch (error) {
-        console.error('Update email error:', error);
+        log.error({ err: error }, 'Update email error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -322,12 +325,12 @@ router.post('/forgot-password', passwordResetLimiter, async (req, res) => {
         const emailSent = await sendPasswordResetEmail(user.email, token, user.username);
 
         if (!emailSent) {
-            console.error('Failed to send password reset email to:', user.email);
+            log.error({ email: user.email }, 'Failed to send password reset email');
         }
 
         res.json(genericResponse);
     } catch (error) {
-        console.error('Forgot password error:', error);
+        log.error({ err: error }, 'Forgot password error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -361,7 +364,7 @@ router.get('/reset-password/validate', async (req, res) => {
 
         res.json({ valid: true });
     } catch (error) {
-        console.error('Validate reset token error:', error);
+        log.error({ err: error }, 'Validate reset token error');
         res.status(500).json({ error: 'Server error', valid: false });
     }
 });
@@ -405,7 +408,7 @@ router.post('/reset-password', async (req, res) => {
 
         res.json({ success: true, message: 'Password reset successfully. Please log in with your new password.' });
     } catch (error) {
-        console.error('Reset password error:', error);
+        log.error({ err: error }, 'Reset password error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -448,7 +451,7 @@ router.delete('/account', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Account deleted' });
     } catch (error) {
-        console.error('Delete account error:', error);
+        log.error({ err: error }, 'Delete account error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }

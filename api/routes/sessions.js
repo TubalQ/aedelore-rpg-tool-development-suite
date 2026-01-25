@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { authenticate } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.sessions;
 
 // Metrics reference (will be set by server.js)
 let metrics = null;
@@ -31,7 +34,7 @@ router.get('/campaign/:campaignId', authenticate, async (req, res) => {
 
         res.json(sessions);
     } catch (error) {
-        console.error('Get sessions error:', error);
+        log.error({ err: error }, 'Get sessions error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -56,7 +59,7 @@ router.get('/:id', authenticate, async (req, res) => {
 
         res.json({ ...session, data: session.data });
     } catch (error) {
-        console.error('Get session error:', error);
+        log.error({ err: error }, 'Get session error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -103,7 +106,7 @@ router.post('/campaign/:campaignId', authenticate, async (req, res) => {
 
         res.json({ success: true, id: result.id, session_number: sessionNum });
     } catch (error) {
-        console.error('Create session error:', error);
+        log.error({ err: error }, 'Create session error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -145,7 +148,7 @@ router.put('/:id', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Update session error:', error);
+        log.error({ err: error }, 'Update session error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -175,7 +178,7 @@ router.put('/:id/lock', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Lock session error:', error);
+        log.error({ err: error }, 'Lock session error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -200,7 +203,7 @@ router.put('/:id/unlock', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Unlock session error:', error);
+        log.error({ err: error }, 'Unlock session error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -228,7 +231,7 @@ router.delete('/:id', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Delete session error:', error);
+        log.error({ err: error }, 'Delete session error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }

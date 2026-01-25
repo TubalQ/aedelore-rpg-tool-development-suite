@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { authenticate } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.dm;
 
 // POST /api/dm/characters/:id/give-xp
 router.post('/characters/:id/give-xp', authenticate, async (req, res) => {
@@ -47,7 +50,7 @@ router.post('/characters/:id/give-xp', authenticate, async (req, res) => {
             message: `Gave ${parsedAmount} XP to character`
         });
     } catch (error) {
-        console.error('Give XP error:', error);
+        log.error({ err: error }, 'Give XP error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -89,7 +92,7 @@ router.get('/characters/:id/build', authenticate, async (req, res) => {
             data: charData
         });
     } catch (error) {
-        console.error('Get character build error:', error);
+        log.error({ err: error }, 'Get character build error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -153,7 +156,7 @@ router.post('/characters/:id/set-locks', authenticate, async (req, res) => {
             message: 'Lock states updated'
         });
     } catch (error) {
-        console.error('Set locks error:', error);
+        log.error({ err: error }, 'Set locks error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -208,7 +211,7 @@ router.post('/characters/:id/unlock', authenticate, async (req, res) => {
             message: 'Character unlocked'
         });
     } catch (error) {
-        console.error('Unlock character error:', error);
+        log.error({ err: error }, 'Unlock character error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -264,7 +267,7 @@ router.post('/characters/:id/give-item', authenticate, async (req, res) => {
         try {
             charData = typeof character.data === 'string' ? JSON.parse(character.data) : (character.data || {});
         } catch (parseErr) {
-            console.error('Failed to parse character data:', parseErr);
+            log.error({ err: parseErr }, 'Failed to parse character data');
             await client.query('ROLLBACK');
             return res.status(500).json({ error: 'Character data is corrupted' });
         }
@@ -309,7 +312,7 @@ router.post('/characters/:id/give-item', authenticate, async (req, res) => {
         });
     } catch (error) {
         await client.query('ROLLBACK');
-        console.error('Give item error:', error);
+        log.error({ err: error }, 'Give item error');
         res.status(500).json({ error: 'Server error' });
     } finally {
         client.release();
@@ -363,7 +366,7 @@ router.post('/characters/:id/remove-item', authenticate, async (req, res) => {
         try {
             charData = typeof character.data === 'string' ? JSON.parse(character.data) : (character.data || {});
         } catch (parseErr) {
-            console.error('Failed to parse character data:', parseErr);
+            log.error({ err: parseErr }, 'Failed to parse character data');
             await client.query('ROLLBACK');
             return res.status(500).json({ error: 'Character data is corrupted' });
         }
@@ -400,7 +403,7 @@ router.post('/characters/:id/remove-item', authenticate, async (req, res) => {
         });
     } catch (error) {
         await client.query('ROLLBACK');
-        console.error('Remove item error:', error);
+        log.error({ err: error }, 'Remove item error');
         res.status(500).json({ error: 'Server error' });
     } finally {
         client.release();
@@ -437,7 +440,7 @@ router.get('/campaigns/:id/characters', authenticate, async (req, res) => {
 
         res.json(result);
     } catch (error) {
-        console.error('Get campaign characters error:', error);
+        log.error({ err: error }, 'Get campaign characters error');
         res.status(500).json({ error: 'Server error' });
     }
 });

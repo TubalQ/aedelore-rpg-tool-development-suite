@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { errorLogLimiter, authenticate } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.errors;
 
 // Metrics reference (will be set by server.js)
 let metrics = null;
@@ -62,7 +65,7 @@ router.post('/', errorLogLimiter, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Error logging frontend error:', error);
+        log.error({ err: error }, 'Error logging frontend error');
         res.status(500).json({ error: 'Failed to log error' });
     }
 });
@@ -82,7 +85,7 @@ router.get('/', authenticate, async (req, res) => {
 
         res.json({ errors, total: metrics?.frontendErrors?.total || 0 });
     } catch (error) {
-        console.error('Error fetching frontend errors:', error);
+        log.error({ err: error }, 'Error fetching frontend errors');
         res.status(500).json({ error: 'Server error' });
     }
 });

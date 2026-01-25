@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { authenticate } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.trash;
 
 // GET /api/trash/characters
 router.get('/characters', authenticate, async (req, res) => {
@@ -12,7 +15,7 @@ router.get('/characters', authenticate, async (req, res) => {
         );
         res.json(characters);
     } catch (error) {
-        console.error('Get deleted characters error:', error);
+        log.error({ err: error }, 'Get deleted characters error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -26,7 +29,7 @@ router.get('/campaigns', authenticate, async (req, res) => {
         );
         res.json(campaigns);
     } catch (error) {
-        console.error('Get deleted campaigns error:', error);
+        log.error({ err: error }, 'Get deleted campaigns error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -49,7 +52,7 @@ router.get('/campaigns/:campaignId/sessions', authenticate, async (req, res) => 
         );
         res.json(sessions);
     } catch (error) {
-        console.error('Get deleted sessions error:', error);
+        log.error({ err: error }, 'Get deleted sessions error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -68,7 +71,7 @@ router.post('/characters/:id/restore', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Character restored' });
     } catch (error) {
-        console.error('Restore character error:', error);
+        log.error({ err: error }, 'Restore character error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -93,7 +96,7 @@ router.post('/campaigns/:id/restore', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Campaign and sessions restored' });
     } catch (error) {
-        console.error('Restore campaign error:', error);
+        log.error({ err: error }, 'Restore campaign error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -121,7 +124,7 @@ router.post('/sessions/:id/restore', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Session restored' });
     } catch (error) {
-        console.error('Restore session error:', error);
+        log.error({ err: error }, 'Restore session error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -140,7 +143,7 @@ router.delete('/characters/:id', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Character permanently deleted' });
     } catch (error) {
-        console.error('Permanent delete character error:', error);
+        log.error({ err: error }, 'Permanent delete character error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -165,7 +168,7 @@ router.delete('/campaigns/:id', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Campaign permanently deleted' });
     } catch (error) {
-        console.error('Permanent delete campaign error:', error);
+        log.error({ err: error }, 'Permanent delete campaign error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -184,7 +187,7 @@ router.delete('/sessions/:id', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Session permanently deleted' });
     } catch (error) {
-        console.error('Permanent delete session error:', error);
+        log.error({ err: error }, 'Permanent delete session error');
         res.status(500).json({ error: 'Server error' });
     }
 });

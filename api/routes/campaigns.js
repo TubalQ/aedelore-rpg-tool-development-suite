@@ -3,6 +3,9 @@ const crypto = require('crypto');
 const router = express.Router();
 const db = require('../db');
 const { authenticate } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.campaigns;
 
 // Metrics reference (will be set by server.js)
 let metrics = null;
@@ -111,7 +114,7 @@ router.get('/', authenticate, async (req, res) => {
         `, [req.userId]);
         res.json(campaigns);
     } catch (error) {
-        console.error('Get campaigns error:', error);
+        log.error({ err: error }, 'Get campaigns error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -136,7 +139,7 @@ router.get('/:id', authenticate, async (req, res) => {
 
         res.json({ ...campaign, sessions });
     } catch (error) {
-        console.error('Get campaign error:', error);
+        log.error({ err: error }, 'Get campaign error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -167,7 +170,7 @@ router.post('/', authenticate, async (req, res) => {
 
         res.json({ success: true, id: result.id });
     } catch (error) {
-        console.error('Create campaign error:', error);
+        log.error({ err: error }, 'Create campaign error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -207,7 +210,7 @@ router.put('/:id', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Update campaign error:', error);
+        log.error({ err: error }, 'Update campaign error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -233,7 +236,7 @@ router.delete('/:id', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Delete campaign error:', error);
+        log.error({ err: error }, 'Delete campaign error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -262,7 +265,7 @@ router.post('/:id/share', authenticate, async (req, res) => {
 
         res.json({ share_code: shareCode });
     } catch (error) {
-        console.error('Generate share code error:', error);
+        log.error({ err: error }, 'Generate share code error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -283,7 +286,7 @@ router.delete('/:id/share', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Revoke share code error:', error);
+        log.error({ err: error }, 'Revoke share code error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -326,7 +329,7 @@ router.post('/join', authenticate, async (req, res) => {
 
         res.json({ success: true, campaign_name: campaign.name, campaign_id: campaign.id });
     } catch (error) {
-        console.error('Join campaign error:', error);
+        log.error({ err: error }, 'Join campaign error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -345,7 +348,7 @@ router.delete('/:id/leave', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Leave campaign error:', error);
+        log.error({ err: error }, 'Leave campaign error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -424,7 +427,7 @@ router.get('/:id/players', authenticate, async (req, res) => {
 
         res.json({ players: playersWithCharacters, isDM });
     } catch (error) {
-        console.error('Get campaign players error:', error);
+        log.error({ err: error }, 'Get campaign players error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -457,7 +460,7 @@ router.delete('/:id/players/:playerId', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Remove player error:', error);
+        log.error({ err: error }, 'Remove player error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -478,7 +481,7 @@ const playerCampaignsList = async (req, res) => {
 
         res.json(campaigns);
     } catch (error) {
-        console.error('Get player campaigns error:', error);
+        log.error({ err: error }, 'Get player campaigns error');
         res.status(500).json({ error: 'Server error' });
     }
 };
@@ -550,7 +553,7 @@ const playerCampaignDetail = async (req, res) => {
             } : null
         });
     } catch (error) {
-        console.error('Get player campaign error:', error);
+        log.error({ err: error }, 'Get player campaign error');
         res.status(500).json({ error: 'Server error' });
     }
 };

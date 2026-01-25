@@ -3,6 +3,9 @@ const router = express.Router();
 const db = require('../db');
 const { validateSystem, VALID_SYSTEMS } = require('../helpers');
 const { authenticate } = require('../middleware/auth');
+const { loggers } = require('../logger');
+
+const log = loggers.characters;
 
 // Metrics reference (will be set by server.js)
 let metrics = null;
@@ -22,7 +25,7 @@ router.get('/', authenticate, async (req, res) => {
         );
         res.json(characters);
     } catch (error) {
-        console.error('Get characters error:', error);
+        log.error({ err: error }, 'Get characters error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -66,7 +69,7 @@ router.get('/:id', authenticate, async (req, res) => {
             campaign: campaignInfo
         });
     } catch (error) {
-        console.error('Get character error:', error);
+        log.error({ err: error }, 'Get character error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -106,7 +109,7 @@ router.post('/', authenticate, async (req, res) => {
 
         res.json({ success: true, id: result.id });
     } catch (error) {
-        console.error('Save character error:', error);
+        log.error({ err: error }, 'Save character error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -149,7 +152,7 @@ router.put('/:id', authenticate, async (req, res) => {
         try {
             existingData = typeof existing.data === 'string' ? JSON.parse(existing.data) : (existing.data || {});
         } catch (parseErr) {
-            console.error('Failed to parse existing character data:', parseErr);
+            log.error({ err: parseErr }, 'Failed to parse existing character data');
         }
 
         // Merge: keep quest_items from database (only DM can modify via /give-item endpoint)
@@ -173,7 +176,7 @@ router.put('/:id', authenticate, async (req, res) => {
 
         res.json({ success: true, id: parseInt(req.params.id) });
     } catch (error) {
-        console.error('Update character error:', error);
+        log.error({ err: error }, 'Update character error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -199,7 +202,7 @@ router.delete('/:id', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Delete character error:', error);
+        log.error({ err: error }, 'Delete character error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -255,7 +258,7 @@ router.post('/:id/link-campaign', authenticate, async (req, res) => {
 
         res.json({ success: true, campaign_name: campaign.name, campaign_id: campaign.id });
     } catch (error) {
-        console.error('Link character to campaign error:', error);
+        log.error({ err: error }, 'Link character to campaign error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -280,7 +283,7 @@ router.delete('/:id/link-campaign', authenticate, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Unlink character from campaign error:', error);
+        log.error({ err: error }, 'Unlink character from campaign error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -314,7 +317,7 @@ router.get('/:id/party', authenticate, async (req, res) => {
 
         res.json({ party: partyMembers });
     } catch (error) {
-        console.error('Get party members error:', error);
+        log.error({ err: error }, 'Get party members error');
         if (metrics) metrics.errors++;
         res.status(500).json({ error: 'Server error' });
     }
@@ -343,7 +346,7 @@ router.post('/:id/lock-race-class', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Race and class locked' });
     } catch (error) {
-        console.error('Lock race/class error:', error);
+        log.error({ err: error }, 'Lock race/class error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -375,7 +378,7 @@ router.post('/:id/lock-attributes', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Attributes locked' });
     } catch (error) {
-        console.error('Lock attributes error:', error);
+        log.error({ err: error }, 'Lock attributes error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -411,7 +414,7 @@ router.post('/:id/lock-abilities', authenticate, async (req, res) => {
 
         res.json({ success: true, message: 'Abilities locked' });
     } catch (error) {
-        console.error('Lock abilities error:', error);
+        log.error({ err: error }, 'Lock abilities error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -459,7 +462,7 @@ router.post('/:id/spend-attribute-points', authenticate, async (req, res) => {
             available_points: newAvailablePoints
         });
     } catch (error) {
-        console.error('Spend attribute points error:', error);
+        log.error({ err: error }, 'Spend attribute points error');
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -528,7 +531,7 @@ router.post('/:id/archive-item', authenticate, async (req, res) => {
         });
     } catch (error) {
         await client.query('ROLLBACK');
-        console.error('Archive item error:', error);
+        log.error({ err: error }, 'Archive item error');
         res.status(500).json({ error: 'Server error' });
     } finally {
         client.release();
@@ -599,7 +602,7 @@ router.post('/:id/unarchive-item', authenticate, async (req, res) => {
         });
     } catch (error) {
         await client.query('ROLLBACK');
-        console.error('Unarchive item error:', error);
+        log.error({ err: error }, 'Unarchive item error');
         res.status(500).json({ error: 'Server error' });
     } finally {
         client.release();
