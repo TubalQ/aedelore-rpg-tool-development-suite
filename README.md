@@ -2,27 +2,44 @@
 
 This is the testing and development environment for [Aedelore RPG Tool](https://aedelore.nu), a fantasy RPG character sheet PWA with DM tools.
 
-## Right Now We Are Testing and Implementing
+## Features Implemented
 
-- **Jest Testing Framework** - 52 API tests covering authentication, character management, and helper functions
-- **CSRF Protection** - Double Submit Cookie pattern for protection against cross-site request forgery
-- **httpOnly Cookies** - Secure authentication token storage with backward compatibility
-- **JavaScript Build Process** - esbuild minification reducing main.js by 74%
-- **Modular API Architecture** - Refactored monolithic server.js into organized route modules
+### Security
+- **CSRF Protection** - Double Submit Cookie pattern with query param fallback for sendBeacon
+- **httpOnly Cookies** - Secure authentication token storage
+- **Redis Rate Limiting** - Persistent rate limiting and account lockout storage
+
+### Testing & Quality
+- **Jest Testing** - 52 API tests covering auth, characters, and helpers
+- **ESLint + Prettier** - Code linting and formatting
+- **Structured Logging** - Pino logger with JSON output
+
+### Build & Performance
+- **JavaScript Build Process** - esbuild minification (74% reduction)
+- **Modular Architecture** - API split into route modules, main.js into 8 modules
+
+### Operations
+- **Database Backups** - Automated pg_dump scripts with 30-day retention
 
 ## Quick Start
 
 ```bash
-# Start all services
+# Start all services (API, DB, Redis, nginx)
 docker compose up -d
 
 # Run tests
-docker exec -it aedelore-dev-api npm test
+docker exec aedelore-dev-api npm test
+
+# Lint code
+docker exec aedelore-dev-api npm run lint
 
 # Build minified JS
 docker compose --profile build run --rm aedelore-dev-build
 
-# View API logs
+# Database backup
+./scripts/backup.sh
+
+# View API logs (structured JSON)
 docker compose logs -f aedelore-dev-api
 ```
 
@@ -32,26 +49,36 @@ docker compose logs -f aedelore-dev-api
 /opt/aedelore-development/
 ├── api/                      # Backend API
 │   ├── server.js             # Express server
+│   ├── logger.js             # Pino structured logging
 │   ├── routes/               # Route modules
-│   │   ├── auth.js           # Authentication routes
+│   │   ├── auth.js           # Authentication
 │   │   ├── characters.js     # Character CRUD
 │   │   ├── campaigns.js      # Campaign management
+│   │   ├── sessions.js       # DM sessions
 │   │   └── ...
 │   ├── middleware/           # Express middleware
-│   │   ├── auth.js           # Auth & rate limiting
+│   │   ├── auth.js           # Auth & Redis rate limiting
 │   │   └── csrf.js           # CSRF protection
-│   └── __tests__/            # Jest tests
+│   ├── __tests__/            # Jest tests (52)
+│   ├── .eslintrc.json        # ESLint config
+│   └── .prettierrc           # Prettier config
 │
 ├── html/                     # Frontend
 │   ├── js/                   # JavaScript
+│   │   ├── main.js           # Entry point
+│   │   └── modules/          # Modular components
 │   ├── css/                  # Stylesheets
 │   ├── data/                 # Game data
 │   └── build.js              # esbuild script
 │
+├── scripts/                  # Utility scripts
+│   ├── backup.sh             # Database backup
+│   └── restore.sh            # Database restore
+│
 ├── db/                       # Database
 │   └── schema.sql            # PostgreSQL schema
 │
-└── compose.yml               # Docker services
+└── compose.yml               # Docker services (API, DB, Redis, nginx)
 ```
 
 ## Testing
@@ -71,6 +98,7 @@ docker exec -it aedelore-dev-api npm test -- auth.test.js
 
 - **Node.js** 20.x
 - **PostgreSQL** 16
+- **Redis** 7 (rate limiting, account lockout)
 - **Docker Compose** for orchestration
 
 ## Related
