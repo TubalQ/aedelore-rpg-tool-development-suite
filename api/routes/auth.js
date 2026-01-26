@@ -16,7 +16,7 @@ const AUTH_COOKIE_NAME = 'auth_token';
 const AUTH_COOKIE_OPTIONS = {
     httpOnly: true,           // Not accessible via JavaScript (XSS protection)
     secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-    sameSite: 'strict',       // CSRF protection
+    sameSite: 'lax',          // 'lax' protects CSRF while allowing normal navigation
     maxAge: 24 * 60 * 60 * 1000,  // 24 hours
     path: '/'
 };
