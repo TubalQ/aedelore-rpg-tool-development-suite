@@ -46,6 +46,7 @@ services:
     container_name: aedelore-dev-api
     restart: unless-stopped
     environment:
+      NODE_ENV: development
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@aedelore-dev-db:5432/${POSTGRES_DB}
       REDIS_URL: redis://aedelore-dev-redis:6379
       SMTP_HOST: ${SMTP_HOST}

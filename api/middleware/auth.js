@@ -10,8 +10,8 @@ const log = loggers.auth;
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION = 15 * 60; // 15 minutes in seconds
 
-// Skip rate limiting in test environment
-const skipInTest = () => process.env.NODE_ENV === 'test';
+// Skip rate limiting in test and development environments
+const skipRateLimiting = () => process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development';
 const isTest = process.env.NODE_ENV === 'test';
 
 // Redis client (null in test environment)
@@ -47,7 +47,7 @@ function createLimiter(options) {
         ...options,
         standardHeaders: true,
         legacyHeaders: false,
-        skip: skipInTest
+        skip: skipRateLimiting
     };
 
     // Use Redis store if available
@@ -70,7 +70,7 @@ const generalLimiter = createLimiter({
 
 const authLimiter = createLimiter({
     windowMs: 15 * 60 * 1000,
-    max: 50,
+    max: 200,
     message: { error: 'Too many authentication attempts, please try again later' }
 });
 
