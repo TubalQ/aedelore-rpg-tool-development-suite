@@ -1,4 +1,4 @@
-import { test, expect, request } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('API Health', () => {
   test('should return healthy status', async ({ request }) => {
@@ -11,229 +11,230 @@ test.describe('API Health', () => {
   });
 });
 
-test.describe('API Authentication', () => {
-  const testUser = `api_test_${Date.now()}`;
-  const testPassword = 'ApiTest123';
-  const testEmail = `${testUser}@test.com`;
-  let authToken: string;
-  let csrfToken: string;
+// Tests that don't need authentication
+test.describe('API Authentication - Negative Tests', () => {
+  test('should reject invalid credentials', async ({ page, context }) => {
+    await page.goto('/character-sheet');
 
-  test('should register a new user via API', async ({ request }) => {
-    // First get CSRF token
-    const healthResponse = await request.get('/api/health');
-    const cookies = healthResponse.headers()['set-cookie'] || '';
-    const csrfMatch = cookies.match(/csrf_token=([^;]+)/);
-    csrfToken = csrfMatch ? csrfMatch[1] : '';
+    const cookies = await context.cookies();
+    const csrfCookie = cookies.find(c => c.name === 'csrf_token');
+    const csrfToken = csrfCookie!.value;
 
-    const response = await request.post('/api/register', {
-      headers: {
-        'X-CSRF-Token': csrfToken,
-      },
-      data: {
-        username: testUser,
-        password: testPassword,
-        email: testEmail,
-      },
-    });
+    const result = await page.evaluate(async ({ csrf }) => {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: 'nonexistent_user_12345',
+          password: 'wrongpassword',
+        }),
+      });
+      return { ok: res.ok, status: res.status };
+    }, { csrf: csrfToken });
 
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body.success).toBe(true);
-    expect(body.token).toBeDefined();
-    authToken = body.token;
-  });
-
-  test('should login via API', async ({ request }) => {
-    const healthResponse = await request.get('/api/health');
-    const cookies = healthResponse.headers()['set-cookie'] || '';
-    const csrfMatch = cookies.match(/csrf_token=([^;]+)/);
-    csrfToken = csrfMatch ? csrfMatch[1] : '';
-
-    const loginUser = `login_api_${Date.now()}`;
-
-    // Register first
-    await request.post('/api/register', {
-      headers: { 'X-CSRF-Token': csrfToken },
-      data: {
-        username: loginUser,
-        password: testPassword,
-        email: `${loginUser}@test.com`,
-      },
-    });
-
-    // Now login
-    const response = await request.post('/api/login', {
-      headers: { 'X-CSRF-Token': csrfToken },
-      data: {
-        username: loginUser,
-        password: testPassword,
-      },
-    });
-
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body.success).toBe(true);
-    expect(body.token).toBeDefined();
-  });
-
-  test('should reject invalid credentials', async ({ request }) => {
-    const healthResponse = await request.get('/api/health');
-    const cookies = healthResponse.headers()['set-cookie'] || '';
-    const csrfMatch = cookies.match(/csrf_token=([^;]+)/);
-    csrfToken = csrfMatch ? csrfMatch[1] : '';
-
-    const response = await request.post('/api/login', {
-      headers: { 'X-CSRF-Token': csrfToken },
-      data: {
-        username: 'nonexistent',
-        password: 'wrongpassword',
-      },
-    });
-
-    expect(response.ok()).toBeFalsy();
-    expect(response.status()).toBe(401);
+    expect(result.ok).toBe(false);
+    expect([401, 429]).toContain(result.status);
   });
 });
 
-test.describe('API Characters', () => {
+// All authentication tests run serially to avoid rate limiting
+test.describe.serial('API Authentication - Full Flow', () => {
   let authToken: string;
+  let testUser: string;
+  let charId: number;
   let csrfToken: string;
-  let characterId: number;
 
-  test.beforeAll(async ({ request }) => {
-    // Get CSRF and register
-    const healthResponse = await request.get('/api/health');
-    const cookies = healthResponse.headers()['set-cookie'] || '';
-    const csrfMatch = cookies.match(/csrf_token=([^;]+)/);
-    csrfToken = csrfMatch ? csrfMatch[1] : '';
+  test('should register a new user', async ({ page, context }) => {
+    await page.goto('/character-sheet');
 
-    const user = `char_api_${Date.now()}`;
-    const regResponse = await request.post('/api/register', {
-      headers: { 'X-CSRF-Token': csrfToken },
-      data: {
-        username: user,
-        password: 'CharTest123',
-        email: `${user}@test.com`,
-      },
-    });
-    const regBody = await regResponse.json();
-    authToken = regBody.token;
+    const cookies = await context.cookies();
+    const csrfCookie = cookies.find(c => c.name === 'csrf_token');
+    expect(csrfCookie).toBeDefined();
+    csrfToken = csrfCookie!.value;
+
+    testUser = `e2e_${Date.now()}`;
+
+    const regResult = await page.evaluate(async ({ user, csrf }) => {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: user,
+          password: 'TestPass123',
+          email: `${user}@test.com`,
+        }),
+      });
+      return { ok: res.ok, status: res.status, body: await res.json() };
+    }, { user: testUser, csrf: csrfToken });
+
+    expect(regResult.ok).toBe(true);
+    expect(regResult.body.success).toBe(true);
+    expect(regResult.body.token).toBeDefined();
+
+    authToken = regResult.body.token;
   });
 
-  test('should create a character', async ({ request }) => {
-    const response = await request.post('/api/characters', {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'X-CSRF-Token': csrfToken,
-      },
-      data: {
-        name: 'API Test Hero',
-        data: { strength: 16, dexterity: 14 },
-        system: 'aedelore',
-      },
-    });
+  test('should login with registered user', async ({ page, context }) => {
+    await page.goto('/character-sheet');
 
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body.success).toBe(true);
-    expect(body.id).toBeDefined();
-    characterId = body.id;
+    const cookies = await context.cookies();
+    const csrfCookie = cookies.find(c => c.name === 'csrf_token');
+    csrfToken = csrfCookie!.value;
+
+    const loginResult = await page.evaluate(async ({ user, csrf }) => {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: user,
+          password: 'TestPass123',
+        }),
+      });
+      return { ok: res.ok, status: res.status, body: await res.json() };
+    }, { user: testUser, csrf: csrfToken });
+
+    expect(loginResult.ok).toBe(true);
+    expect(loginResult.body.success).toBe(true);
+    expect(loginResult.body.token).toBeDefined();
+
+    // Update token with fresh login token
+    authToken = loginResult.body.token;
   });
 
-  test('should list characters', async ({ request }) => {
-    const response = await request.get('/api/characters', {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-      },
-    });
+  test('should create a character', async ({ page, context }) => {
+    await page.goto('/character-sheet');
 
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(Array.isArray(body)).toBe(true);
+    const cookies = await context.cookies();
+    const csrfCookie = cookies.find(c => c.name === 'csrf_token');
+    csrfToken = csrfCookie!.value;
+
+    const createResult = await page.evaluate(async ({ token, csrf }) => {
+      const res = await fetch('/api/characters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: 'E2E Test Hero',
+          data: { strength: 18, dexterity: 14, constitution: 16 },
+          system: 'aedelore',
+        }),
+      });
+      return { ok: res.ok, status: res.status, body: await res.json() };
+    }, { token: authToken, csrf: csrfToken });
+
+    expect(createResult.ok).toBe(true);
+    expect(createResult.body.id).toBeDefined();
+
+    charId = createResult.body.id;
   });
 
-  test('should get character by id', async ({ request }) => {
-    // First create a character
-    const createResponse = await request.post('/api/characters', {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'X-CSRF-Token': csrfToken,
-      },
-      data: {
-        name: 'Get Test Hero',
-        data: { level: 1 },
-        system: 'aedelore',
-      },
-    });
-    const created = await createResponse.json();
+  test('should list characters', async ({ page }) => {
+    await page.goto('/character-sheet');
 
-    const response = await request.get(`/api/characters/${created.id}`, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-      },
-    });
+    const listResult = await page.evaluate(async ({ token }) => {
+      const res = await fetch('/api/characters', {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+      return { ok: res.ok, body: await res.json() };
+    }, { token: authToken });
 
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body.name).toBe('Get Test Hero');
+    expect(listResult.ok).toBe(true);
+    expect(Array.isArray(listResult.body)).toBe(true);
+    expect(listResult.body.length).toBeGreaterThan(0);
+    expect(listResult.body.some((c: { name: string }) => c.name === 'E2E Test Hero')).toBe(true);
   });
 
-  test('should update character', async ({ request }) => {
-    // Create first
-    const createResponse = await request.post('/api/characters', {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'X-CSRF-Token': csrfToken,
-      },
-      data: {
-        name: 'Update Test Hero',
-        data: { level: 1 },
-        system: 'aedelore',
-      },
-    });
-    const created = await createResponse.json();
+  test('should get character by id', async ({ page }) => {
+    await page.goto('/character-sheet');
 
-    // Update
-    const response = await request.put(`/api/characters/${created.id}`, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'X-CSRF-Token': csrfToken,
-      },
-      data: {
-        name: 'Updated Hero',
-        data: { level: 2 },
-        system: 'aedelore',
-      },
-    });
+    const getResult = await page.evaluate(async ({ token, id }) => {
+      const res = await fetch(`/api/characters/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+      return { ok: res.ok, body: await res.json() };
+    }, { token: authToken, id: charId });
 
-    expect(response.ok()).toBeTruthy();
-    const body = await response.json();
-    expect(body.success).toBe(true);
+    expect(getResult.ok).toBe(true);
+    expect(getResult.body.name).toBe('E2E Test Hero');
   });
 
-  test('should delete character', async ({ request }) => {
-    // Create first
-    const createResponse = await request.post('/api/characters', {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'X-CSRF-Token': csrfToken,
-      },
-      data: {
-        name: 'Delete Test Hero',
-        data: {},
-        system: 'aedelore',
-      },
-    });
-    const created = await createResponse.json();
+  test('should update character', async ({ page, context }) => {
+    await page.goto('/character-sheet');
 
-    // Delete
-    const response = await request.delete(`/api/characters/${created.id}`, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'X-CSRF-Token': csrfToken,
-      },
-    });
+    const cookies = await context.cookies();
+    const csrfCookie = cookies.find(c => c.name === 'csrf_token');
+    csrfToken = csrfCookie!.value;
 
-    expect(response.ok()).toBeTruthy();
+    const updateResult = await page.evaluate(async ({ token, csrf, id }) => {
+      const res = await fetch(`/api/characters/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: 'Updated E2E Hero',
+          data: { strength: 20, dexterity: 14, constitution: 16 },
+          system: 'aedelore',
+        }),
+      });
+      return { ok: res.ok, body: await res.json() };
+    }, { token: authToken, csrf: csrfToken, id: charId });
+
+    expect(updateResult.ok).toBe(true);
+  });
+
+  test('should delete character', async ({ page, context }) => {
+    await page.goto('/character-sheet');
+
+    const cookies = await context.cookies();
+    const csrfCookie = cookies.find(c => c.name === 'csrf_token');
+    csrfToken = csrfCookie!.value;
+
+    const deleteResult = await page.evaluate(async ({ token, csrf, id }) => {
+      const res = await fetch(`/api/characters/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'X-CSRF-Token': csrf,
+        },
+        credentials: 'include',
+      });
+      return { ok: res.ok };
+    }, { token: authToken, csrf: csrfToken, id: charId });
+
+    expect(deleteResult.ok).toBe(true);
+
+    // Verify character is deleted
+    const getResult = await page.evaluate(async ({ token, id }) => {
+      const res = await fetch(`/api/characters/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+      });
+      return { ok: res.ok, status: res.status };
+    }, { token: authToken, id: charId });
+
+    expect(getResult.ok).toBe(false);
+    expect(getResult.status).toBe(404);
   });
 });

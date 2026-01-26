@@ -64,6 +64,17 @@ services:
       aedelore-dev-redis:
         condition: service_healthy
 
+  # E2E test runner with Playwright
+  aedelore-dev-e2e:
+    build: ./e2e
+    container_name: aedelore-dev-e2e
+    environment:
+      BASE_URL: http://aedelore-dev-web
+    depends_on:
+      - aedelore-dev-web
+    profiles:
+      - e2e  # Only run when explicitly requested
+
   # Build service for frontend JavaScript minification
   aedelore-dev-build:
     build:
