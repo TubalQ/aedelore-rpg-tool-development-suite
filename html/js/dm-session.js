@@ -562,6 +562,10 @@ async function doLogout() {
         }
     }
 
+    // Clear session data
+    sessionData = getEmptySessionData();
+    hasUnsavedChanges = false;
+
     // Call server logout
     try {
         await apiRequest('/api/logout', {
