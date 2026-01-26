@@ -1113,6 +1113,37 @@ function generateVisibilityDropdown(currentValue, dataPath) {
     return html;
 }
 
+// Helper to parse dataPath like "sessionData.npcs[0].visibleTo" and get the target object and property
+function parseDataPath(dataPath) {
+    // Expected format: sessionData.<type>[<index>].visibleTo
+    const match = dataPath.match(/^sessionData\.(\w+)\[(\d+)\]\.visibleTo$/);
+    if (!match) {
+        console.error('Invalid dataPath:', dataPath);
+        return null;
+    }
+    const type = match[1]; // npcs, places, encounters, readAloud
+    const index = parseInt(match[2], 10);
+    return { type, index };
+}
+
+// Get visibility value at path
+function getVisibilityAt(dataPath) {
+    const parsed = parseDataPath(dataPath);
+    if (!parsed) return 'all';
+    const { type, index } = parsed;
+    if (!sessionData[type] || !sessionData[type][index]) return 'all';
+    return sessionData[type][index].visibleTo;
+}
+
+// Set visibility value at path
+function setVisibilityAt(dataPath, value) {
+    const parsed = parseDataPath(dataPath);
+    if (!parsed) return;
+    const { type, index } = parsed;
+    if (!sessionData[type] || !sessionData[type][index]) return;
+    sessionData[type][index].visibleTo = value;
+}
+
 // Handle player visibility checkbox change via data attributes
 function handleVisibilityPlayerChange(checkbox) {
     const dataPath = checkbox.dataset.datapath;
@@ -1123,11 +1154,13 @@ function handleVisibilityPlayerChange(checkbox) {
 
 // Toggle "All" visibility - if checked, set to 'all', otherwise clear
 function toggleVisibilityAll(dataPath, isChecked) {
+    console.log('[Visibility] toggleVisibilityAll called:', dataPath, 'isChecked:', isChecked);
     if (isChecked) {
-        eval(dataPath + " = 'all'");
+        setVisibilityAt(dataPath, 'all');
     } else {
-        eval(dataPath + " = []");
+        setVisibilityAt(dataPath, []);
     }
+    console.log('[Visibility] After setting, value is:', getVisibilityAt(dataPath));
     renderPlanningByDay();
     renderNPCsList();
     renderPlacesList();
@@ -1139,7 +1172,7 @@ function toggleVisibilityAll(dataPath, isChecked) {
 
 // Toggle individual player visibility
 function toggleVisibilityPlayer(dataPath, playerName, isChecked) {
-    let current = eval(dataPath);
+    let current = getVisibilityAt(dataPath);
 
     // Normalize to array
     if (!current || current === 'all') {
@@ -1158,9 +1191,9 @@ function toggleVisibilityPlayer(dataPath, playerName, isChecked) {
 
     // If empty, default back to 'all'
     if (current.length === 0) {
-        eval(dataPath + " = 'all'");
+        setVisibilityAt(dataPath, 'all');
     } else {
-        eval(dataPath + " = " + JSON.stringify(current));
+        setVisibilityAt(dataPath, current);
     }
 
     renderPlanningByDay();
@@ -5932,6 +5965,11 @@ async function autoSaveToServer() {
     const sessionNumber = document.getElementById('session_number').value;
     const date = document.getElementById('session_date').value;
     const location = document.getElementById('session_location').value;
+
+    // Debug: Log NPCs with visibleTo
+    if (sessionData.npcs && sessionData.npcs.length > 0) {
+        console.log('[Save] NPCs being saved:', sessionData.npcs.map(n => ({name: n.name, visibleTo: n.visibleTo})));
+    }
 
     try {
         const res = await apiRequest(`/api/sessions/${currentSessionId}`, {
