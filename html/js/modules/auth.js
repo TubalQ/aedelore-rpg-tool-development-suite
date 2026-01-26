@@ -220,6 +220,20 @@ async function doLogout() {
         }
     }
 
+    // Clear character sheet fields (without confirmation)
+    document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(input => {
+        input.value = '';
+    });
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    document.querySelectorAll('select').forEach(select => {
+        select.selectedIndex = 0;
+    });
+    document.querySelectorAll('input[type="range"]').forEach(range => {
+        range.value = range.min || 0;
+    });
+
     // Call server logout
     try {
         await window.apiRequest('/api/logout', {
@@ -235,6 +249,7 @@ async function doLogout() {
     window.currentCampaign = null;
     localStorage.removeItem('aedelore_auth_token');
     localStorage.removeItem('aedelore_current_character_id');
+    localStorage.removeItem('aedelore_character_autosave');
 
     // Clear Service Worker cache
     if ('caches' in window) {
