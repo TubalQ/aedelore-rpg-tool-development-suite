@@ -1129,7 +1129,8 @@ function toggleVisibilityAll(dataPath, isChecked) {
     renderPlacesList();
     renderEncountersList();
     renderReadAloudList();
-    triggerAutoSave();
+    // Visibility changes save immediately to prevent data loss
+    triggerImmediateSave();
 }
 
 // Toggle individual player visibility
@@ -1163,7 +1164,8 @@ function toggleVisibilityPlayer(dataPath, playerName, isChecked) {
     renderPlacesList();
     renderEncountersList();
     renderReadAloudList();
-    triggerAutoSave();
+    // Visibility changes save immediately to prevent data loss
+    triggerImmediateSave();
 }
 
 // ============================================
@@ -5875,10 +5877,21 @@ function toggleAccordion(element) {
 
 let saveTimeout = null;
 let isSaving = false;
+let hasUnsavedChanges = false;
+
+// Warn user about unsaved changes when leaving page
+window.addEventListener('beforeunload', (e) => {
+    if (hasUnsavedChanges && !isSessionLocked) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
 
 // Debounced auto-save to server (waits 2 seconds after last change)
 function triggerAutoSave() {
     if (!currentSessionId || isSessionLocked || !authToken) return;
+
+    hasUnsavedChanges = true;
 
     // Clear any pending save
     if (saveTimeout) {
@@ -5889,6 +5902,21 @@ function triggerAutoSave() {
     saveTimeout = setTimeout(async () => {
         await autoSaveToServer();
     }, 2000);
+}
+
+// Immediate save (bypasses debounce) - use for important changes like visibility
+async function triggerImmediateSave() {
+    if (!currentSessionId || isSessionLocked || !authToken) return;
+
+    hasUnsavedChanges = true;
+
+    // Clear any pending debounced save
+    if (saveTimeout) {
+        clearTimeout(saveTimeout);
+        saveTimeout = null;
+    }
+
+    await autoSaveToServer();
 }
 
 async function autoSaveToServer() {
@@ -5913,6 +5941,7 @@ async function autoSaveToServer() {
         });
 
         if (res.ok) {
+            hasUnsavedChanges = false;
             // Show brief save indicator
             showSaveIndicator('Saved');
         } else {
