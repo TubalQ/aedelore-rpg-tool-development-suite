@@ -8779,6 +8779,23 @@ function renderPlayerCampaignView() {
             `;
         }
 
+        // Read Aloud
+        if (summary.read_aloud && summary.read_aloud.length > 0) {
+            summaryHtml += `
+                <div style="margin-bottom: var(--space-4);">
+                    <h5 style="color: var(--accent-gold); margin: 0 0 var(--space-2) 0; font-size: 0.9rem;">📜 Story Moments (${summary.read_aloud.length})</h5>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                        ${summary.read_aloud.map(ra => `
+                            <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.15) 100%); border-radius: var(--radius-sm); padding: var(--space-3); border-left: 3px solid var(--accent-gold);">
+                                <div style="font-weight: 600; color: var(--accent-gold); margin-bottom: var(--space-1);">${escapeHtml(ra.title)}</div>
+                                <p style="margin: 0; color: var(--text-secondary); font-style: italic; white-space: pre-wrap; line-height: 1.5;">${escapeHtml(ra.text)}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
         // Turning Points
         if (summary.turning_points && summary.turning_points.length > 0) {
             summaryHtml += `
@@ -8818,6 +8835,7 @@ function renderPlayerCampaignView() {
             (summary.places && summary.places.length > 0) ||
             (summary.encounters && summary.encounters.length > 0) ||
             (summary.items && summary.items.length > 0) ||
+            (summary.read_aloud && summary.read_aloud.length > 0) ||
             (summary.turning_points && summary.turning_points.length > 0) ||
             (summary.event_log && summary.event_log.length > 0) ||
             (summary.session_notes && summary.session_notes.followUp);
