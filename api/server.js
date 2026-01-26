@@ -4,8 +4,10 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const path = require('path');
 const helmet = require('helmet');
+const swaggerUi = require('swagger-ui-express');
 const db = require('./db');
 const { loggers } = require('./logger');
+const swaggerSpec = require('./swagger');
 
 const log = loggers.server;
 
@@ -215,6 +217,13 @@ errorRoutes.setMetrics(metrics);
 // ============================================
 // Mount Routes
 // ============================================
+
+// API Documentation (Swagger UI)
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Aedelore API Documentation'
+}));
+app.get('/api/docs.json', (req, res) => res.json(swaggerSpec));
 
 // Auth routes (register, login, logout, me, password, email, forgot-password, reset-password, account)
 app.use('/api', authRoutes);

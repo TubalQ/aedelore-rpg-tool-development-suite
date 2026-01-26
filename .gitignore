@@ -35,3 +35,6 @@ Claude/
 claude/
 CLAUDE.md
 backups/*.sql.gz
+
+# SSL certificates
+ssl/

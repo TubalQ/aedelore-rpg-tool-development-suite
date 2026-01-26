@@ -30,7 +30,44 @@ function setMetrics(m, writeFn) {
     writeMetricsFile = writeFn;
 }
 
-// POST /api/register
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [username, password, email]
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 30
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *               email:
+ *                 type: string
+ *                 format: email
+ *     responses:
+ *       200:
+ *         description: Registration successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 token: { type: string }
+ *                 userId: { type: integer }
+ *       400:
+ *         description: Validation error
+ */
 router.post('/register', authLimiter, async (req, res) => {
     const { username, password, email } = req.body;
 
@@ -89,7 +126,38 @@ router.post('/register', authLimiter, async (req, res) => {
     }
 });
 
-// POST /api/login
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login with username and password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [username, password]
+ *             properties:
+ *               username: { type: string }
+ *               password: { type: string }
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 token: { type: string }
+ *                 userId: { type: integer }
+ *       401:
+ *         description: Invalid credentials
+ *       429:
+ *         description: Account locked (too many failed attempts)
+ */
 router.post('/login', authLimiter, async (req, res) => {
     const { username, password } = req.body;
 
@@ -146,7 +214,19 @@ router.post('/login', authLimiter, async (req, res) => {
     }
 });
 
-// POST /api/logout
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Logout current user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ */
 router.post('/logout', authenticate, async (req, res) => {
     // Get token from header or cookie
     const token = req.headers.authorization?.replace('Bearer ', '') || req.cookies?.[AUTH_COOKIE_NAME];
@@ -168,7 +248,29 @@ router.post('/logout', authenticate, async (req, res) => {
     res.json({ success: true });
 });
 
-// GET /api/me
+/**
+ * @swagger
+ * /me:
+ *   get:
+ *     summary: Get current user profile
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: User profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user: { $ref: '#/components/schemas/User' }
+ *                 characters: { type: array }
+ *                 campaigns: { type: array }
+ *       401:
+ *         description: Unauthorized
+ */
 router.get('/me', authenticate, async (req, res) => {
     try {
         const userId = req.userId;

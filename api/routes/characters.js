@@ -16,7 +16,29 @@ function setMetrics(m, writeFn) {
     writeMetricsFile = writeFn;
 }
 
-// GET /api/characters
+/**
+ * @swagger
+ * /characters:
+ *   get:
+ *     summary: List all characters for current user
+ *     tags: [Characters]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of characters
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: integer }
+ *                   name: { type: string }
+ *                   system: { type: string }
+ *                   updated_at: { type: string, format: date-time }
+ */
 router.get('/', authenticate, async (req, res) => {
     try {
         const characters = await db.all(
@@ -31,7 +53,29 @@ router.get('/', authenticate, async (req, res) => {
     }
 });
 
-// GET /api/characters/:id
+/**
+ * @swagger
+ * /characters/{id}:
+ *   get:
+ *     summary: Get a character by ID
+ *     tags: [Characters]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Character details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Character'
+ *       404:
+ *         description: Character not found
+ */
 router.get('/:id', authenticate, async (req, res) => {
     try {
         const character = await db.get(
@@ -75,7 +119,38 @@ router.get('/:id', authenticate, async (req, res) => {
     }
 });
 
-// POST /api/characters
+/**
+ * @swagger
+ * /characters:
+ *   post:
+ *     summary: Create a new character
+ *     tags: [Characters]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, data]
+ *             properties:
+ *               name: { type: string, maxLength: 100 }
+ *               data: { type: object }
+ *               system: { type: string, enum: [aedelore, dnd5e, pathfinder2e, storyteller, cod] }
+ *     responses:
+ *       200:
+ *         description: Character created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 id: { type: integer }
+ *       400:
+ *         description: Validation error
+ */
 router.post('/', authenticate, async (req, res) => {
     const { name, data, system } = req.body;
 
@@ -115,7 +190,36 @@ router.post('/', authenticate, async (req, res) => {
     }
 });
 
-// PUT /api/characters/:id
+/**
+ * @swagger
+ * /characters/{id}:
+ *   put:
+ *     summary: Update a character
+ *     tags: [Characters]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, data]
+ *             properties:
+ *               name: { type: string }
+ *               data: { type: object }
+ *               system: { type: string }
+ *     responses:
+ *       200:
+ *         description: Character updated
+ *       404:
+ *         description: Character not found
+ */
 router.put('/:id', authenticate, async (req, res) => {
     const { name, data, system } = req.body;
 
