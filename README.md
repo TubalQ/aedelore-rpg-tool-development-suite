@@ -1,10 +1,12 @@
 # Aedelore RPG Tool - Development Suite
 
-This is the testing and development environment for [Aedelore RPG Tool](https://aedelore.nu), a fantasy RPG character sheet PWA with DM tools.
+This is the development and testing environment for [Aedelore RPG Tool](https://aedelore.nu), a fantasy RPG character sheet PWA with DM tools.
 
-> **Note:** All features listed below are currently live in production at [aedelore.nu](https://aedelore.nu). This repository documents what has been implemented and serves as the development/testing ground for new features.
+> **Status:** All features listed below are currently **live in production** at [aedelore.nu](https://aedelore.nu).
+>
+> For complete documentation on how everything works (architecture, API endpoints, database schema, game data), see the [main repository's DEVELOPER.md](https://github.com/TubalQ/aedelore-rpg-tools/blob/main/docs/DEVELOPER.md).
 
-## Features Implemented
+## What Has Been Implemented
 
 ### Security
 - **CSRF Protection** - Double Submit Cookie pattern with query param fallback for sendBeacon
@@ -105,4 +107,6 @@ docker exec -it aedelore-dev-api npm test -- auth.test.js
 
 ## Related
 
-- Production: https://aedelore.nu
+- **Production Site:** [aedelore.nu](https://aedelore.nu)
+- **Main Repository:** [aedelore-rpg-tools](https://github.com/TubalQ/aedelore-rpg-tools)
+- **Full Documentation:** [DEVELOPER.md](https://github.com/TubalQ/aedelore-rpg-tools/blob/main/docs/DEVELOPER.md)
