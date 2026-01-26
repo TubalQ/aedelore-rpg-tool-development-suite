@@ -2,6 +2,8 @@
 
 This is the testing and development environment for [Aedelore RPG Tool](https://aedelore.nu), a fantasy RPG character sheet PWA with DM tools.
 
+> **Note:** All features listed below are currently live in production at [aedelore.nu](https://aedelore.nu). This repository documents what has been implemented and serves as the development/testing ground for new features.
+
 ## Features Implemented
 
 ### Security
