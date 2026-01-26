@@ -1173,6 +1173,10 @@ function toggleVisibilityPlayer(dataPath, playerName, isChecked) {
 async function loadCampaignsAndShowDashboard() {
     if (!authToken) return;
 
+    // Check for URL parameters (e.g., from character sheet link)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlCampaignId = urlParams.get('campaign');
+
     try {
         // Load DM campaigns
         const res = await apiRequest('/api/campaigns');
@@ -1210,6 +1214,34 @@ async function loadCampaignsAndShowDashboard() {
             }
         } catch (e) {
             joinedCampaigns = [];
+        }
+
+        // Check if URL parameter specifies a campaign to open
+        if (urlCampaignId) {
+            const campaignIdNum = parseInt(urlCampaignId);
+            // Clear the URL parameter to avoid reopening on refresh
+            window.history.replaceState({}, '', window.location.pathname);
+
+            // Check if it's a joined campaign (player view)
+            const joinedCampaign = joinedCampaigns.find(c => c.id === campaignIdNum);
+            if (joinedCampaign) {
+                await openPlayerCampaignView(campaignIdNum);
+                return;
+            }
+
+            // Check if it's a DM campaign
+            const dmCampaign = allCampaigns.find(c => c.id === campaignIdNum);
+            if (dmCampaign) {
+                // Open the campaign's session list or create new session
+                if (dmCampaign.sessions && dmCampaign.sessions.length > 0) {
+                    // Open the most recent session
+                    const latestSession = dmCampaign.sessions[dmCampaign.sessions.length - 1];
+                    await openSession(campaignIdNum, latestSession.id);
+                } else {
+                    await createNewSessionForCampaign(campaignIdNum);
+                }
+                return;
+            }
         }
 
         // Try to restore previous view state (e.g., after page refresh)
