@@ -9,6 +9,21 @@ function getCsrfToken() {
     return match ? decodeURIComponent(match[1]) : null;
 }
 
+// Ensure CSRF cookie is set (call on page load)
+// This fixes the issue where page is loaded from cache without CSRF cookie
+async function ensureCsrfToken() {
+    if (!getCsrfToken()) {
+        try {
+            await fetch('/api/health', { credentials: 'include' });
+        } catch (e) {
+            // Ignore errors - offline or network issue
+        }
+    }
+}
+
+// Initialize CSRF on load
+ensureCsrfToken();
+
 // API request helper with CSRF protection
 async function apiRequest(url, options = {}) {
     const csrfToken = getCsrfToken();
