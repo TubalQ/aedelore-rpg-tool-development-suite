@@ -112,9 +112,13 @@ function updateStatusBar() {
     if (arcanaValueEl) arcanaValueEl.textContent = `${arcanaCurrent}/${arcanaMax}`;
     if (arcanaBar) arcanaBar.style.width = `${(arcanaCurrent / arcanaMax) * 100}%`;
 
-    // Hide arcana for non-magic classes
+    // Hide/show class-specific resources
     const selectedClass = document.getElementById('class')?.value;
     const isMagicClass = selectedClass === 'Mage' || selectedClass === 'Druid';
+    const isPriest = selectedClass === 'Priest';
+    const isBard = selectedClass === 'Bard';
+    const isShadowblade = selectedClass === 'Shadowblade';
+
     if (arcanaContainer) {
         arcanaContainer.classList.toggle('status-arcana-hidden', !isMagicClass);
     }
@@ -124,6 +128,75 @@ function updateStatusBar() {
     if (quickArcanaRow) {
         quickArcanaRow.style.display = isMagicClass ? 'flex' : 'none';
     }
+
+    // Faith (Priest)
+    const faithContainer = document.getElementById('status-faith-container');
+    const faithSlider = document.getElementById('faith_slider');
+    const faithMax = faithSlider ? parseInt(faithSlider.max) : 6;
+    const faithCurrent = faithSlider ? parseInt(faithSlider.value) : 0;
+    const faithValueEl = document.getElementById('status-faith-value');
+    const faithBar = document.getElementById('status-faith-bar');
+
+    if (faithValueEl) faithValueEl.textContent = `${faithCurrent}/${faithMax}`;
+    if (faithBar) faithBar.style.width = `${(faithCurrent / faithMax) * 100}%`;
+    if (faithContainer) faithContainer.style.display = isPriest ? 'flex' : 'none';
+
+    const quickFaithRow = document.getElementById('quick-faith-row');
+    if (quickFaithRow) quickFaithRow.style.display = isPriest ? 'flex' : 'none';
+    const quickFaithValue = document.getElementById('quick-faith-value');
+    if (quickFaithValue) quickFaithValue.textContent = `${faithCurrent}/${faithMax}`;
+
+    // Inspiration (Bard)
+    const inspirationContainer = document.getElementById('status-inspiration-container');
+    const inspirationSlider = document.getElementById('inspiration_slider');
+    const inspirationMax = inspirationSlider ? parseInt(inspirationSlider.max) : 3;
+    const inspirationCurrent = inspirationSlider ? parseInt(inspirationSlider.value) : 0;
+    const inspirationValueEl = document.getElementById('status-inspiration-value');
+    const inspirationBar = document.getElementById('status-inspiration-bar');
+
+    if (inspirationValueEl) inspirationValueEl.textContent = `${inspirationCurrent}/${inspirationMax}`;
+    if (inspirationBar) inspirationBar.style.width = `${(inspirationCurrent / inspirationMax) * 100}%`;
+    if (inspirationContainer) inspirationContainer.style.display = isBard ? 'flex' : 'none';
+
+    const quickInspirationRow = document.getElementById('quick-inspiration-row');
+    if (quickInspirationRow) quickInspirationRow.style.display = isBard ? 'flex' : 'none';
+    const quickInspirationValue = document.getElementById('quick-inspiration-value');
+    if (quickInspirationValue) quickInspirationValue.textContent = `${inspirationCurrent}/${inspirationMax}`;
+
+    // Void (Shadowblade)
+    const voidContainer = document.getElementById('status-void-container');
+    const voidSlider = document.getElementById('void_slider');
+    const voidMax = voidSlider ? parseInt(voidSlider.max) : 6;
+    const voidCurrent = voidSlider ? parseInt(voidSlider.value) : 0;
+    const voidValueEl = document.getElementById('status-void-value');
+    const voidBar = document.getElementById('status-void-bar');
+
+    if (voidValueEl) voidValueEl.textContent = `${voidCurrent}/${voidMax}`;
+    if (voidBar) voidBar.style.width = `${(voidCurrent / voidMax) * 100}%`;
+    if (voidContainer) voidContainer.style.display = isShadowblade ? 'flex' : 'none';
+
+    const quickVoidRow = document.getElementById('quick-void-row');
+    if (quickVoidRow) quickVoidRow.style.display = isShadowblade ? 'flex' : 'none';
+    const quickVoidValue = document.getElementById('quick-void-value');
+    if (quickVoidValue) quickVoidValue.textContent = `${voidCurrent}/${voidMax}`;
+
+    // Corruption (Shadowblade)
+    const corruptionContainer = document.getElementById('status-corruption-container');
+    const corruptionSlider = document.getElementById('corruption_slider');
+    const corruptionMax = corruptionSlider ? parseInt(corruptionSlider.max) : 10;
+    const corruptionCurrent = corruptionSlider ? parseInt(corruptionSlider.value) : 0;
+    const corruptionValueEl = document.getElementById('status-corruption-value');
+
+    if (corruptionValueEl) {
+        corruptionValueEl.textContent = `${corruptionCurrent}/${corruptionMax}`;
+        corruptionValueEl.style.opacity = corruptionCurrent > 0 ? '1' : '0.5';
+    }
+    if (corruptionContainer) corruptionContainer.style.display = isShadowblade ? 'flex' : 'none';
+
+    const quickCorruptionRow = document.getElementById('quick-corruption-row');
+    if (quickCorruptionRow) quickCorruptionRow.style.display = isShadowblade ? 'flex' : 'none';
+    const quickCorruptionValue = document.getElementById('quick-corruption-value');
+    if (quickCorruptionValue) quickCorruptionValue.textContent = corruptionCurrent;
 
     // Willpower
     const willSlider = document.getElementById('willpower_slider');
@@ -1126,6 +1199,138 @@ function gainArcana() {
     }
 }
 
+// Faith functions (Priest)
+function spendFaith() {
+    const faithSlider = document.getElementById('faith_slider');
+    if (faithSlider) {
+        const current = parseInt(faithSlider.value);
+        if (current <= 0) {
+            showQuickMessage('No Faith left!');
+            return;
+        }
+        faithSlider.value = current - 1;
+        faithSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Spent 1 Faith (now ${current - 1})`);
+    }
+}
+
+function gainFaith() {
+    const faithSlider = document.getElementById('faith_slider');
+    if (faithSlider) {
+        const max = parseInt(faithSlider.max);
+        const current = parseInt(faithSlider.value);
+        if (current >= max) {
+            showQuickMessage('Faith already at maximum!');
+            return;
+        }
+        faithSlider.value = current + 1;
+        faithSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Gained +1 Faith (now ${current + 1})`);
+    }
+}
+
+// Inspiration functions (Bard)
+function spendInspiration() {
+    const inspirationSlider = document.getElementById('inspiration_slider');
+    if (inspirationSlider) {
+        const current = parseInt(inspirationSlider.value);
+        if (current <= 0) {
+            showQuickMessage('No Inspiration left!');
+            return;
+        }
+        inspirationSlider.value = current - 1;
+        inspirationSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Spent 1 Inspiration (now ${current - 1})`);
+    }
+}
+
+function gainInspiration() {
+    const inspirationSlider = document.getElementById('inspiration_slider');
+    if (inspirationSlider) {
+        const max = parseInt(inspirationSlider.max);
+        const current = parseInt(inspirationSlider.value);
+        if (current >= max) {
+            showQuickMessage('Inspiration already at maximum!');
+            return;
+        }
+        inspirationSlider.value = current + 1;
+        inspirationSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Gained +1 Inspiration (now ${current + 1})`);
+    }
+}
+
+// Void functions (Shadowblade)
+function spendVoid() {
+    const voidSlider = document.getElementById('void_slider');
+    if (voidSlider) {
+        const current = parseInt(voidSlider.value);
+        if (current <= 0) {
+            showQuickMessage('No Void Essence left!');
+            return;
+        }
+        voidSlider.value = current - 1;
+        voidSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Spent 1 Void (now ${current - 1})`);
+    }
+}
+
+function gainVoid() {
+    const voidSlider = document.getElementById('void_slider');
+    if (voidSlider) {
+        const max = parseInt(voidSlider.max);
+        const current = parseInt(voidSlider.value);
+        if (current >= max) {
+            showQuickMessage('Void Essence already at maximum!');
+            return;
+        }
+        voidSlider.value = current + 1;
+        voidSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Gained +1 Void (now ${current + 1})`);
+    }
+}
+
+// Corruption functions (Shadowblade)
+function addCorruption() {
+    const corruptionSlider = document.getElementById('corruption_slider');
+    if (corruptionSlider) {
+        const max = parseInt(corruptionSlider.max);
+        const current = parseInt(corruptionSlider.value);
+        if (current >= max) {
+            showQuickMessage('Maximum Corruption reached! The void consumes you...');
+            return;
+        }
+        corruptionSlider.value = current + 1;
+        corruptionSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        if (current + 1 >= 7) {
+            showQuickMessage(`⚠️ Corruption +1 (now ${current + 1}) - Void powers unstable!`);
+        } else {
+            showQuickMessage(`Corruption +1 (now ${current + 1})`);
+        }
+    }
+}
+
+function reduceCorruption() {
+    const corruptionSlider = document.getElementById('corruption_slider');
+    if (corruptionSlider) {
+        const current = parseInt(corruptionSlider.value);
+        if (current <= 0) {
+            showQuickMessage('No Corruption to reduce!');
+            return;
+        }
+        corruptionSlider.value = current - 1;
+        corruptionSlider.dispatchEvent(new Event('input'));
+        updateStatusBar();
+        showQuickMessage(`Corruption -1 (now ${current - 1})`);
+    }
+}
+
 function gainWillpower() {
     const willSlider = document.getElementById('willpower_slider');
     if (willSlider) {
@@ -1729,8 +1934,20 @@ function initDashboard() {
         }
     });
 
+    // Add new class-specific sliders
+    const faithSlider = document.getElementById('faith_slider');
+    const inspirationSlider = document.getElementById('inspiration_slider');
+    const voidSlider = document.getElementById('void_slider');
+    const corruptionSlider = document.getElementById('corruption_slider');
+
+    if (faithSlider) faithSlider.addEventListener('input', updateStatusBar);
+    if (inspirationSlider) inspirationSlider.addEventListener('input', updateStatusBar);
+    if (voidSlider) voidSlider.addEventListener('input', updateStatusBar);
+    if (corruptionSlider) corruptionSlider.addEventListener('input', updateStatusBar);
+
     // Add slider listeners for sidebar
-    [hpSlider, arcanaSlider, willSlider, bleedSlider, weakSlider, worthSlider].forEach(slider => {
+    [hpSlider, arcanaSlider, willSlider, bleedSlider, weakSlider, worthSlider,
+     faithSlider, inspirationSlider, voidSlider, corruptionSlider].forEach(slider => {
         if (slider) {
             slider.addEventListener('input', updateDesktopSidebar);
         }

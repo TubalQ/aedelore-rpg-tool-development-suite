@@ -254,6 +254,131 @@ const SPELLS_BY_CLASS = {
         { name: "Create Food and Water", damage: "0", arcana: "4", weakened: "-", desc: "Nature, Conjure sustenance, Instant" },
         { name: "Heroes' Feast", damage: "0", arcana: "6", weakened: "-", desc: "Nature, Summon magical feast, Permanent" },
         { name: "Temple of the Gods", damage: "0", arcana: "7", weakened: "-", desc: "Nature, Create holy temple, 24 hours" }
+    ],
+
+    "Priest": [
+        // Divine Healing - Faith 1
+        { name: "Healing Word", damage: "1/D6", faith: "1", weakened: "-", desc: "Divine, Speak healing into wounded ally" },
+        { name: "Sacred Flame", damage: "1/D10", faith: "1", weakened: "-", desc: "Divine, Holy fire descends on target" },
+        { name: "Guidance", damage: "0", faith: "1", weakened: "-", desc: "Divine, Grant divine guidance, 1 round" },
+        { name: "Light of Faith", damage: "0", faith: "1", weakened: "-", desc: "Divine, Create holy light, 4 rounds" },
+        { name: "Sanctuary", damage: "0", faith: "1", weakened: "-", desc: "Divine, Protect target from attacks, 2 rounds" },
+
+        // Divine Healing - Faith 2
+        { name: "Cure Wounds", damage: "2/D6", faith: "2", weakened: "-", desc: "Divine, Touch to heal wounds" },
+        { name: "Lesser Restoration", damage: "0", faith: "2", weakened: "-", desc: "Divine, Cure disease or condition" },
+        { name: "Shield of Faith", damage: "0", faith: "2", weakened: "-", desc: "Divine, Protective aura, 4 rounds" },
+        { name: "Bless", damage: "0", faith: "2", weakened: "-", desc: "Divine, Bless up to 3 allies, 2 rounds" },
+        { name: "Prayer of Healing", damage: "2/D6", faith: "2", weakened: "-", desc: "Divine, Heal multiple allies, Not in battle" },
+
+        // Divine Offensive - Faith 2-3
+        { name: "Guiding Bolt", damage: "2/D6", faith: "2", weakened: "-", desc: "Divine, Bolt of radiant light" },
+        { name: "Spiritual Weapon", damage: "2/D6", faith: "2", weakened: "-", desc: "Divine, Summon holy weapon, 2 rounds" },
+        { name: "Holy Smite", damage: "2/D10", faith: "3", weakened: "-", desc: "Divine, Smite with holy power" },
+        { name: "Flame Strike", damage: "3/D6", faith: "3", weakened: "-", desc: "Divine, Pillar of divine fire" },
+
+        // Divine Protection - Faith 3-4
+        { name: "Dispel Evil", damage: "0", faith: "3", weakened: "-", desc: "Divine, Ward against evil, 4 rounds" },
+        { name: "Protection from Evil", damage: "0", faith: "3", weakened: "-", desc: "Divine, Shield from evil creatures, 4 rounds" },
+        { name: "Beacon of Hope", damage: "0", faith: "3", weakened: "-", desc: "Divine, Inspire hope, allies heal more, 2 rounds" },
+        { name: "Death Ward", damage: "0", faith: "4", weakened: "-", desc: "Divine, Protect from death, once, 8 hours" },
+        { name: "Guardian of Faith", damage: "2/D10", faith: "4", weakened: "-", desc: "Divine, Summon guardian spirit, 4 rounds" },
+
+        // Divine High Power - Faith 4-6
+        { name: "Greater Restoration", damage: "0", faith: "4", weakened: "-", desc: "Divine, Cure any ailment" },
+        { name: "Mass Cure Wounds", damage: "3/D6", faith: "4", weakened: "-", desc: "Divine, Heal all nearby allies" },
+        { name: "Holy Aura", damage: "0", faith: "5", weakened: "-", desc: "Divine, Protective aura for all allies, 4 rounds" },
+        { name: "Divine Intervention", damage: "Special", faith: "5", weakened: "-", desc: "Divine, Call upon your deity, Special" },
+        { name: "Resurrection", damage: "0", faith: "6", weakened: "-", desc: "Divine, Bring back the dead, Not in battle" },
+
+        // Religion-specific (examples)
+        { name: "Wrath of Taninsam", damage: "3/D10", faith: "4", weakened: "-", desc: "Taninsam, Righteous flame, Only Taninsam followers" },
+        { name: "Mercy of Tanala", damage: "3/D6", faith: "4", weakened: "-", desc: "Tanala, Great healing wave, Only Tanala followers" },
+        { name: "Judgment of Tanaru", damage: "3/D6", faith: "4", weakened: "-", desc: "Tanaru, Divine judgment, Only Tanaru followers" },
+        { name: "Turn Undead", damage: "0", faith: "2", weakened: "-", desc: "Divine, Force undead to flee, 2 rounds" },
+        { name: "Banishment", damage: "0", faith: "4", weakened: "-", desc: "Divine, Banish creature to another plane, 2 rounds" }
+    ],
+
+    "Bard": [
+        // Performance - Inspiration 1
+        { name: "Bardic Inspiration", check: "Passive", damage: "Grant ally bonus die", inspiration: "1", weakened: "-", desc: "Performance, Grant ally bonus die, 1 round", gain: 0 },
+        { name: "Vicious Mockery", damage: "1/D6", inspiration: "1", weakened: "-", desc: "Performance, Insult deals psychic damage" },
+        { name: "Healing Word", damage: "1/D6", inspiration: "1", weakened: "-", desc: "Song, Speak healing melody" },
+        { name: "Prestidigitation", damage: "0", inspiration: "1", weakened: "-", desc: "Performance, Minor magical tricks" },
+        { name: "Minor Illusion", damage: "0", inspiration: "1", weakened: "-", desc: "Illusion, Create small illusion, 2 rounds" },
+
+        // Songs - Inspiration 1-2
+        { name: "Song of Rest", damage: "1/D6", inspiration: "1", weakened: "-", desc: "Song, Allies heal during rest, Not in battle" },
+        { name: "Song of Courage", damage: "0", inspiration: "1", weakened: "-", desc: "Song, Allies resist fear, 3 rounds" },
+        { name: "Dissonant Whispers", damage: "2/D6", inspiration: "2", weakened: "-", desc: "Song, Painful sound in target's mind" },
+        { name: "Shatter", damage: "2/D6", inspiration: "2", weakened: "-", desc: "Song, Loud noise damages targets" },
+        { name: "Enthralling Performance", damage: "0", inspiration: "2", weakened: "-", desc: "Performance, Captivate audience, Not in battle" },
+
+        // Enchantment - Inspiration 2-3
+        { name: "Charm Person", damage: "0", inspiration: "2", weakened: "-", desc: "Enchantment, Charm a humanoid, 4 rounds" },
+        { name: "Suggestion", damage: "0", inspiration: "2", weakened: "-", desc: "Enchantment, Suggest a course of action" },
+        { name: "Hypnotic Pattern", damage: "0", inspiration: "3", weakened: "-", desc: "Enchantment, Hypnotize multiple targets, 2 rounds" },
+        { name: "Compulsion", damage: "0", inspiration: "3", weakened: "-", desc: "Enchantment, Force targets to move, 2 rounds" },
+        { name: "Hold Person", damage: "0", inspiration: "3", weakened: "-", desc: "Enchantment, Paralyze humanoid, 2 rounds" },
+
+        // Utility & Support
+        { name: "Detect Thoughts", damage: "0", inspiration: "2", weakened: "-", desc: "Divination, Read surface thoughts, 2 rounds" },
+        { name: "Speak with Dead", damage: "0", inspiration: "3", weakened: "-", desc: "Necromancy, Question a corpse, Not in battle" },
+        { name: "Tongues", damage: "0", inspiration: "2", weakened: "-", desc: "Divination, Understand all languages, 4 rounds" },
+        { name: "Invisibility", damage: "0", inspiration: "2", weakened: "-", desc: "Illusion, Turn invisible, 4 rounds" },
+        { name: "Dimension Door", damage: "0", inspiration: "3", weakened: "-", desc: "Conjuration, Teleport short distance, Instant" },
+
+        // Advanced Performance
+        { name: "Countercharm", damage: "0", inspiration: "2", weakened: "-", desc: "Performance, Allies resist charms, 2 rounds" },
+        { name: "Mass Suggestion", damage: "0", inspiration: "3", weakened: "-", desc: "Enchantment, Suggest to multiple targets" },
+        { name: "Greater Invisibility", damage: "0", inspiration: "3", weakened: "-", desc: "Illusion, Invisible even while attacking, 4 rounds" },
+        { name: "Otto's Dance", damage: "0", inspiration: "3", weakened: "-", desc: "Enchantment, Force target to dance, 2 rounds" },
+
+        // Knowledge & Lore
+        { name: "Identify", damage: "0", inspiration: "1", weakened: "-", desc: "Divination, Identify magic item, Not in battle" },
+        { name: "Legend Lore", damage: "0", inspiration: "3", weakened: "-", desc: "Divination, Learn about legendary item/place, Not in battle" },
+        { name: "Cutting Words", check: "Reaction", damage: "Reduce enemy roll", inspiration: "1", weakened: "-", desc: "Performance, Distract enemy, reduce their roll", gain: 0 }
+    ],
+
+    "Shadowblade": [
+        // Void Strike - Void 1
+        { name: "Shadow Strike", damage: "1/D10", void: "1", corruption: "+1", desc: "Void, Strike with shadow-infused blade" },
+        { name: "Umbral Dagger", damage: "1/D6", void: "1", corruption: "0", desc: "Void, Throw a dagger of pure shadow" },
+        { name: "Dark Vision", damage: "0", void: "1", corruption: "0", desc: "Void, See in complete darkness, 4 rounds" },
+        { name: "Whisper Step", damage: "0", void: "1", corruption: "0", desc: "Void, Move silently through shadows" },
+
+        // Void Control - Void 2
+        { name: "Shadow Cloak", damage: "0", void: "2", corruption: "0", desc: "Void, Become one with shadows, 3 rounds" },
+        { name: "Void Slash", damage: "2/D6", void: "2", corruption: "+1", desc: "Void, Slash that ignores armor" },
+        { name: "Fade", damage: "0", void: "2", corruption: "0", desc: "Void, Briefly become ethereal, 1 round" },
+        { name: "Shadow Bind", damage: "0", void: "2", corruption: "+1", desc: "Void, Bind target with their own shadow, 2 rounds" },
+        { name: "Absorb Shadow", damage: "0", void: "2", corruption: "+1", desc: "Void, Absorb nearby shadows for power, +1 Void" },
+
+        // Void Assault - Void 3
+        { name: "Nightblade", damage: "2/D10", void: "3", corruption: "+1", desc: "Void, Blade of pure darkness" },
+        { name: "Shadow Step", damage: "0", void: "3", corruption: "0", desc: "Void, Teleport between shadows, Instant" },
+        { name: "Void Grasp", damage: "2/D6", void: "3", corruption: "+2", desc: "Void, Tendril of void grabs target" },
+        { name: "Silence of the Void", damage: "0", void: "3", corruption: "+1", desc: "Void, Create zone of silence, 2 rounds" },
+        { name: "Shadow Duplicate", damage: "0", void: "3", corruption: "+1", desc: "Void, Create shadow copy of self, 2 rounds" },
+
+        // Void Mastery - Void 4-5
+        { name: "Consume Light", damage: "3/D6", void: "4", corruption: "+2", desc: "Void, Absorb all light, damage all in area" },
+        { name: "Void Walk", damage: "0", void: "4", corruption: "+1", desc: "Void, Travel through void to distant point" },
+        { name: "Shadow Army", damage: "2/D6", void: "4", corruption: "+2", desc: "Void, Summon shadow warriors, 2 rounds" },
+        { name: "Embrace the Void", damage: "3/D10", void: "5", corruption: "+3", desc: "Void, Channel pure void energy" },
+        { name: "Ebon Blade", damage: "3/D10", void: "5", corruption: "+2", desc: "Void, Summon ultimate shadow weapon, 4 rounds" },
+
+        // Corruption Abilities (unlock at corruption thresholds)
+        { name: "Dark Pact", damage: "Special", void: "0", corruption: "-2", desc: "Corruption, Sacrifice HP to reduce corruption" },
+        { name: "Feed on Fear", damage: "1/D6", void: "1", corruption: "+1", desc: "Corruption, Heal from enemy's fear" },
+        { name: "Shadow Possession", damage: "0", void: "4", corruption: "+3", desc: "Corruption, Possess target through their shadow, 2 rounds" },
+        { name: "Void Explosion", damage: "4/D6", void: "5", corruption: "+4", desc: "Corruption, Unleash void in massive explosion" },
+        { name: "One with Shadow", damage: "0", void: "3", corruption: "+2", desc: "Corruption, Become living shadow, 4 rounds" },
+
+        // Stealth & Utility
+        { name: "Shadow Meld", damage: "0", void: "1", corruption: "0", desc: "Stealth, Blend perfectly into shadows, Not in battle" },
+        { name: "Umbral Sight", damage: "0", void: "2", corruption: "0", desc: "Void, See invisible and hidden, 2 rounds" },
+        { name: "Void Sense", damage: "0", void: "2", corruption: "0", desc: "Void, Sense creatures in darkness, 4 rounds" }
     ]
 };
 

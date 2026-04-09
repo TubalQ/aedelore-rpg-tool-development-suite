@@ -54,5 +54,32 @@ const STARTING_EQUIPMENT = {
     "High Elf_Druid": { weapon: "Quarterstaff", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
     "Moon Elf_Druid": { weapon: "Quarterstaff", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
     "Orc_Druid": { weapon: "Glaive", armor: { chest: "Hide", shoulders: "Leather Pauldrons", legs: "Leather Greaves" }, shield: null },
-    "Troll_Druid": { weapon: "Quarterstaff", armor: { chest: "Hide", shoulders: "Leather Pauldrons", legs: "Leather Greaves" }, shield: null }
+    "Troll_Druid": { weapon: "Quarterstaff", armor: { chest: "Hide", shoulders: "Leather Pauldrons", legs: "Leather Greaves" }, shield: null },
+
+    // PRIEST
+    "Human_Priest": { weapon: "Mace", armor: { chest: "Cloth", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Dwarf_Priest": { weapon: "Warhammer", armor: { chest: "Padded", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Halfling_Priest": { weapon: "Light Hammer", armor: { chest: "Cloth", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "High Elf_Priest": { weapon: "Mace", armor: { chest: "Cloth", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Moon Elf_Priest": { weapon: "Quarterstaff", armor: { chest: "Cloth", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Orc_Priest": { weapon: "Mace", armor: { chest: "Padded", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Troll_Priest": { weapon: "Quarterstaff", armor: { chest: "Padded", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+
+    // BARD
+    "Human_Bard": { weapon: "Rapier", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Dwarf_Bard": { weapon: "Shortsword", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Leather Greaves" }, shield: null },
+    "Halfling_Bard": { weapon: "Dagger", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "High Elf_Bard": { weapon: "Rapier", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Moon Elf_Bard": { weapon: "Shortsword", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+    "Orc_Bard": { weapon: "Handaxe", armor: { chest: "Leather", shoulders: "Leather Pauldrons", legs: "Leather Greaves" }, shield: null },
+    "Troll_Bard": { weapon: "Quarterstaff", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Cloth Pants" }, shield: null },
+
+    // SHADOWBLADE
+    "Human_Shadowblade": { weapon: "Shortsword", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Leather Greaves" }, shield: null },
+    "Dwarf_Shadowblade": { weapon: "Handaxe", armor: { chest: "Studded Leather", shoulders: "Leather Pauldrons", legs: "Leather Greaves" }, shield: null },
+    "Halfling_Shadowblade": { weapon: "Dagger", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Leather Greaves" }, shield: null },
+    "High Elf_Shadowblade": { weapon: "Shortsword", armor: { chest: "Leather", shoulders: "Cloth Mantle", legs: "Leather Greaves" }, shield: null },
+    "Moon Elf_Shadowblade": { weapon: "Dagger", armor: { head: "Cloth Hood", chest: "Leather", shoulders: "Cloth Mantle", legs: "Leather Greaves" }, shield: null },
+    "Orc_Shadowblade": { weapon: "Shortsword", armor: { chest: "Hide", shoulders: "Leather Pauldrons", legs: "Leather Greaves" }, shield: null },
+    "Troll_Shadowblade": { weapon: "Dagger", armor: { chest: "Hide", shoulders: "Cloth Mantle", legs: "Leather Greaves" }, shield: null }
 };

@@ -243,6 +243,97 @@ function initializeSliders() {
     updateSliderDisplay('pot_poison_slider', 'pot-poison-value');
     updateSliderDisplay('pot_arcane_slider', 'pot-arcane-value');
     updateSliderDisplay('poison_arrow_slider', 'poison-arrow-value');
+
+    // Faith slider (Priest)
+    const faithSlider = document.getElementById('faith_slider');
+    const faithDisplay = document.getElementById('faith-value-display');
+
+    if (faithSlider && faithDisplay) {
+        faithSlider.addEventListener('input', function() {
+            const value = this.value;
+            const max = this.max;
+            faithDisplay.textContent = `${value} / ${max}`;
+
+            // Golden gradient for faith
+            const percentage = (value / max) * 100;
+            this.style.background = `linear-gradient(to right, #fbbf24 ${percentage}%, rgba(251, 191, 36, 0.3) ${percentage}%)`;
+        });
+
+        faithDisplay.textContent = `${faithSlider.value} / ${faithSlider.max}`;
+        faithSlider.dispatchEvent(new Event('input'));
+    }
+
+    // Inspiration slider (Bard)
+    const inspirationSlider = document.getElementById('inspiration_slider');
+    const inspirationDisplay = document.getElementById('inspiration-value-display');
+
+    if (inspirationSlider && inspirationDisplay) {
+        inspirationSlider.addEventListener('input', function() {
+            const value = this.value;
+            const max = this.max;
+            inspirationDisplay.textContent = `${value} / ${max}`;
+
+            // Pink gradient for inspiration
+            const percentage = (value / max) * 100;
+            this.style.background = `linear-gradient(to right, #ec4899 ${percentage}%, rgba(236, 72, 153, 0.3) ${percentage}%)`;
+        });
+
+        inspirationDisplay.textContent = `${inspirationSlider.value} / ${inspirationSlider.max}`;
+        inspirationSlider.dispatchEvent(new Event('input'));
+    }
+
+    // Void slider (Shadowblade)
+    const voidSlider = document.getElementById('void_slider');
+    const voidDisplay = document.getElementById('void-value-display');
+
+    if (voidSlider && voidDisplay) {
+        voidSlider.addEventListener('input', function() {
+            const value = this.value;
+            const max = this.max;
+            voidDisplay.textContent = `${value} / ${max}`;
+
+            // Indigo/purple gradient for void
+            const percentage = (value / max) * 100;
+            this.style.background = `linear-gradient(to right, #818cf8 ${percentage}%, rgba(99, 102, 241, 0.3) ${percentage}%)`;
+        });
+
+        voidDisplay.textContent = `${voidSlider.value} / ${voidSlider.max}`;
+        voidSlider.dispatchEvent(new Event('input'));
+    }
+
+    // Corruption slider (Shadowblade)
+    const corruptionSlider = document.getElementById('corruption_slider');
+    const corruptionDisplay = document.getElementById('corruption-value-display');
+    const corruptionWarning = document.getElementById('corruption-warning');
+
+    if (corruptionSlider && corruptionDisplay) {
+        corruptionSlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            const max = parseInt(this.max);
+            corruptionDisplay.textContent = `${value} / ${max}`;
+
+            // Show warning when corruption is high (7+)
+            if (corruptionWarning) {
+                corruptionWarning.style.display = value >= 7 ? 'block' : 'none';
+            }
+
+            // Red gradient that gets more intense with corruption
+            let color;
+            if (value <= 3) {
+                color = '#f59e0b'; // Orange-ish for low corruption
+            } else if (value <= 6) {
+                color = '#ef4444'; // Red for medium
+            } else {
+                color = '#dc2626'; // Dark red for high
+            }
+
+            const percentage = (value / max) * 100;
+            this.style.background = `linear-gradient(to right, ${color} ${percentage}%, rgba(239, 68, 68, 0.3) ${percentage}%)`;
+        });
+
+        corruptionDisplay.textContent = `${corruptionSlider.value} / ${corruptionSlider.max}`;
+        corruptionSlider.dispatchEvent(new Event('input'));
+    }
 }
 
 // Note: Initialization is handled by init.js after all DOM elements are created

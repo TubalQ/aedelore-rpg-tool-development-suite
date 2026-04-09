@@ -7,13 +7,18 @@ let originalWorthinessValue = null;
 function updateSpellsList() {
     const selectedClass = document.getElementById('class').value;
 
-    // Check if class is a conjurer (uses arcana) or melee (uses weakened)
-    const isConjurer = selectedClass && CLASSES && CLASSES[selectedClass] && CLASSES[selectedClass].abilityType === "arcana";
+    // Check if class is a caster type (arcana, faith, inspiration, void) or melee (uses weakened)
+    const abilityType = selectedClass && CLASSES && CLASSES[selectedClass] ? CLASSES[selectedClass].abilityType : null;
+    const isConjurer = abilityType === "arcana";
+    const isFaithCaster = abilityType === "faith";
+    const isInspirationCaster = abilityType === "inspiration";
+    const isVoidCaster = abilityType === "void";
+    const isCaster = isConjurer || isFaithCaster || isInspirationCaster || isVoidCaster;
 
     // Toggle conjurer class on page-spells for mobile CSS labels
     const spellsPage = document.getElementById('page-spells');
     if (spellsPage) {
-        spellsPage.classList.toggle('conjurer-mode', isConjurer);
+        spellsPage.classList.toggle('conjurer-mode', isCaster);
     }
 
     // Update table headers
@@ -22,14 +27,26 @@ function updateSpellsList() {
     const column4Header = document.getElementById('spell-column-4');
 
     if (column2Header) {
-        if (isConjurer) {
-            column2Header.textContent = 'Arcana Cost';
-            column2Header.style.color = 'var(--primary-purple)';
-            // Hide gain column for conjurers
+        if (isCaster) {
+            // Set header based on caster type
+            if (isConjurer) {
+                column2Header.textContent = 'Arcana Cost';
+                column2Header.style.color = 'var(--primary-purple)';
+            } else if (isFaithCaster) {
+                column2Header.textContent = 'Faith Cost';
+                column2Header.style.color = '#fbbf24';
+            } else if (isInspirationCaster) {
+                column2Header.textContent = 'Inspiration Cost';
+                column2Header.style.color = '#ec4899';
+            } else if (isVoidCaster) {
+                column2Header.textContent = 'Void Cost';
+                column2Header.style.color = '#818cf8';
+            }
+            // Hide gain column for casters
             if (column3Header) column3Header.style.display = 'none';
-            // Change to Spelldamage for conjurers
+            // Change to Spelldamage/Effect for casters
             if (column4Header) {
-                column4Header.textContent = 'Spelldamage';
+                column4Header.textContent = 'Damage/Effect';
                 column4Header.style.color = '#ef4444';
             }
         } else {
@@ -61,7 +78,7 @@ function updateSpellsList() {
     for (let i = 1; i <= maxSpells; i++) {
         const gainCell = document.getElementById(`spell_${i}_gain_cell`);
         if (gainCell) {
-            gainCell.style.display = isConjurer ? 'none' : 'table-cell';
+            gainCell.style.display = isCaster ? 'none' : 'table-cell';
         }
     }
 
@@ -118,16 +135,29 @@ function autoFillSpellData(spellIndex) {
     const spells = SPELLS_BY_CLASS[selectedClass];
     const spell = spells.find(s => s.name === spellName);
 
-    // Check if class is a conjurer
-    const isConjurer = CLASSES && CLASSES[selectedClass] && CLASSES[selectedClass].abilityType === "arcana";
+    // Check class ability type
+    const abilityType = CLASSES && CLASSES[selectedClass] ? CLASSES[selectedClass].abilityType : null;
+    const isConjurer = abilityType === "arcana";
+    const isFaithCaster = abilityType === "faith";
+    const isInspirationCaster = abilityType === "inspiration";
+    const isVoidCaster = abilityType === "void";
+    const isCaster = isConjurer || isFaithCaster || isInspirationCaster || isVoidCaster;
 
     if (spell) {
-        // Auto-fill second column (arcana for spells, description for abilities)
+        // Auto-fill second column (resource cost for casters, description for melee)
         const arcanaInput = document.getElementById(`spell_${spellIndex}_arcana`);
         if (arcanaInput) {
-            if (isConjurer) {
-                // For conjurers: show arcana cost
-                arcanaInput.value = spell.arcana;
+            if (isCaster) {
+                // For casters: show resource cost based on type
+                if (isConjurer) {
+                    arcanaInput.value = spell.arcana || '';
+                } else if (isFaithCaster) {
+                    arcanaInput.value = spell.faith || '';
+                } else if (isInspirationCaster) {
+                    arcanaInput.value = spell.inspiration || '';
+                } else if (isVoidCaster) {
+                    arcanaInput.value = spell.void || '';
+                }
             } else {
                 // For melee: show what it does (use desc which has full detail)
                 arcanaInput.value = spell.desc || spell.damage || '';
@@ -136,18 +166,18 @@ function autoFillSpellData(spellIndex) {
 
         // Auto-fill gain (only for melee abilities)
         const gainInput = document.getElementById(`spell_${spellIndex}_gain`);
-        if (gainInput && !isConjurer) {
+        if (gainInput && !isCaster) {
             gainInput.value = spell.gain !== undefined ? `${spell.gain}D10` : '';
         }
 
-        // Auto-fill last column (Spelldamage for conjurers, Weakened Cost for melee)
+        // Auto-fill last column (Damage/Effect for casters, Weakened Cost for melee)
         const weakenedInput = document.getElementById(`spell_${spellIndex}_weakened`);
         if (weakenedInput) {
-            if (isConjurer) {
-                // For conjurers (Mage/Druid): show spelldamage (2/D10 format)
+            if (isCaster) {
+                // For casters: show damage/effect
                 weakenedInput.value = spell.damage || '';
             } else {
-                // For melee (Warrior/Thief/Hunter/Outcast): show weakened cost (numeric or special)
+                // For melee: show weakened cost
                 weakenedInput.value = spell.weakened || '';
             }
         }

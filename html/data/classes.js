@@ -198,5 +198,105 @@ const CLASSES = {
             hpBonus: 3
         },
         abilityType: "arcana"
+    },
+    "Priest": {
+        name: "Priest",
+        bonuses: [
+            "+2 Wisdom",
+            "+1 Charisma",
+            "+2 Religion",
+            "+1 Medicine",
+            "+1 Insight",
+            "+1 Persuasion",
+            "Starting Armor: Cloth (chest, shoulders, legs)",
+            "Starting Weapon: Mace",
+            "Starting Gold: 5",
+            "Starting Worthiness: 8",
+            "Divine Spell Capacity: 8",
+            "Full Faith (1D6)",
+            "Faith regeneration: 1/prayer or 2/rest",
+            "HP Bonus: +2"
+        ],
+        startingEquipment: {
+            armor: {
+                chest: "Cloth",
+                shoulders: "Cloth Mantle",
+                legs: "Cloth Pants"
+            },
+            weapon: "Mace",
+            gold: 5,
+            worthiness: 8,
+            faith: "1D6",
+            spells: 8,
+            hpBonus: 2
+        },
+        abilityType: "faith"
+    },
+    "Bard": {
+        name: "Bard",
+        bonuses: [
+            "+2 Charisma",
+            "+1 Dexterity",
+            "+2 Performance",
+            "+1 Persuasion",
+            "+1 Deception",
+            "+1 Insight",
+            "+1 History",
+            "Starting Armor: Leather (chest), Cloth (shoulders, legs)",
+            "Starting Weapon: Rapier",
+            "Starting Gold: 8",
+            "Starting Worthiness: 4",
+            "Song Capacity: 6",
+            "Inspiration: 3/day",
+            "HP Bonus: +3"
+        ],
+        startingEquipment: {
+            armor: {
+                chest: "Leather",
+                shoulders: "Cloth Mantle",
+                legs: "Cloth Pants"
+            },
+            weapon: "Rapier",
+            gold: 8,
+            worthiness: 4,
+            inspiration: 3,
+            spells: 6,
+            hpBonus: 3
+        },
+        abilityType: "inspiration"
+    },
+    "Shadowblade": {
+        name: "Shadowblade",
+        bonuses: [
+            "+1 Dexterity",
+            "+1 Intelligence",
+            "+2 Stealth",
+            "+1 Arcana",
+            "+1 Sleight of Hand",
+            "+1 Intimidation",
+            "Starting Armor: Leather (chest, legs), Cloth (shoulders)",
+            "Starting Weapon: Shortsword",
+            "Starting Gold: 4",
+            "Starting Worthiness: -2",
+            "Void Ability Capacity: 6",
+            "Full Void Essence (1D6)",
+            "Corruption Track: 0-10",
+            "HP Bonus: +3"
+        ],
+        startingEquipment: {
+            armor: {
+                chest: "Leather",
+                shoulders: "Cloth Mantle",
+                legs: "Leather Greaves"
+            },
+            weapon: "Shortsword",
+            gold: 4,
+            worthiness: -2,
+            void: "1D6",
+            corruption: 0,
+            spells: 6,
+            hpBonus: 3
+        },
+        abilityType: "void"
     }
 };

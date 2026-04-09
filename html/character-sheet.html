@@ -563,6 +563,35 @@
                     <div class="status-bar-inner status-bar-arcana" id="status-arcana-bar" style="width: 0%"></div>
                 </div>
             </div>
+            <div class="status-item status-faith" onclick="focusSlider('faith_slider')" id="status-faith-container" style="display: none;">
+                <span class="status-icon">✝️</span>
+                <span class="status-label">Faith</span>
+                <span class="status-value" id="status-faith-value">0/6</span>
+                <div class="status-bar-fill">
+                    <div class="status-bar-inner status-bar-faith" id="status-faith-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="status-item status-inspiration" onclick="focusSlider('inspiration_slider')" id="status-inspiration-container" style="display: none;">
+                <span class="status-icon">🎵</span>
+                <span class="status-label">Insp</span>
+                <span class="status-value" id="status-inspiration-value">0/3</span>
+                <div class="status-bar-fill">
+                    <div class="status-bar-inner status-bar-inspiration" id="status-inspiration-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="status-item status-void" onclick="focusSlider('void_slider')" id="status-void-container" style="display: none;">
+                <span class="status-icon">🌑</span>
+                <span class="status-label">Void</span>
+                <span class="status-value" id="status-void-value">0/6</span>
+                <div class="status-bar-fill">
+                    <div class="status-bar-inner status-bar-void" id="status-void-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="status-item status-corruption" onclick="focusSlider('corruption_slider')" id="status-corruption-container" style="display: none;">
+                <span class="status-icon">💀</span>
+                <span class="status-label">Corr</span>
+                <span class="status-value status-value-danger" id="status-corruption-value">0/10</span>
+            </div>
             <div class="status-item status-willpower" onclick="focusSlider('willpower_slider')">
                 <span class="status-icon">🔷</span>
                 <span class="status-label">Will</span>
@@ -667,6 +696,38 @@
                         <div class="stat-adjust-buttons">
                             <button class="stat-btn stat-btn-minus" onclick="spendArcana()">−1</button>
                             <button class="stat-btn stat-btn-plus" onclick="gainArcana()">+1</button>
+                        </div>
+                    </div>
+                    <!-- Faith Row (Priest only) -->
+                    <div class="stat-adjust-row stat-faith" id="quick-faith-row" style="display: none;">
+                        <span class="stat-adjust-label">✝️ Faith <span class="stat-adjust-value" id="quick-faith-value">0/0</span></span>
+                        <div class="stat-adjust-buttons">
+                            <button class="stat-btn stat-btn-minus" onclick="spendFaith()">−1</button>
+                            <button class="stat-btn stat-btn-plus" onclick="gainFaith()">+1</button>
+                        </div>
+                    </div>
+                    <!-- Inspiration Row (Bard only) -->
+                    <div class="stat-adjust-row stat-inspiration" id="quick-inspiration-row" style="display: none;">
+                        <span class="stat-adjust-label">🎵 Inspiration <span class="stat-adjust-value" id="quick-inspiration-value">0/0</span></span>
+                        <div class="stat-adjust-buttons">
+                            <button class="stat-btn stat-btn-minus" onclick="spendInspiration()">−1</button>
+                            <button class="stat-btn stat-btn-plus" onclick="gainInspiration()">+1</button>
+                        </div>
+                    </div>
+                    <!-- Void Row (Shadowblade only) -->
+                    <div class="stat-adjust-row stat-void" id="quick-void-row" style="display: none;">
+                        <span class="stat-adjust-label">🌑 Void <span class="stat-adjust-value" id="quick-void-value">0/0</span></span>
+                        <div class="stat-adjust-buttons">
+                            <button class="stat-btn stat-btn-minus" onclick="spendVoid()">−1</button>
+                            <button class="stat-btn stat-btn-plus" onclick="gainVoid()">+1</button>
+                        </div>
+                    </div>
+                    <!-- Corruption Row (Shadowblade only) -->
+                    <div class="stat-adjust-row stat-corruption" id="quick-corruption-row" style="display: none;">
+                        <span class="stat-adjust-label">💀 Corruption <span class="stat-adjust-value" id="quick-corruption-value">0</span></span>
+                        <div class="stat-adjust-buttons">
+                            <button class="stat-btn stat-btn-minus" onclick="reduceCorruption()">−1</button>
+                            <button class="stat-btn stat-btn-plus" onclick="addCorruption()">+1</button>
                         </div>
                     </div>
                     <!-- Willpower Row -->
@@ -891,6 +952,9 @@
                             <option value="Mage">Mage</option>
                             <option value="Hunter">Hunter</option>
                             <option value="Druid">Druid</option>
+                            <option value="Priest">Priest</option>
+                            <option value="Bard">Bard</option>
+                            <option value="Shadowblade">Shadowblade</option>
                         </select>
                     </div>
                     <div class="field-group">
@@ -1907,7 +1971,7 @@
                 </div>
 
                 <!-- Arcana Slider -->
-                <div class="slider-container" style="margin-top: 25px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 1px solid rgba(168, 85, 247, 0.4); box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);">
+                <div class="slider-container" id="arcana-slider-container" style="margin-top: 25px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.05) 100%); border: 1px solid rgba(168, 85, 247, 0.4); box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);">
                     <div class="slider-label">
                         <span style="color: var(--primary-purple); font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);">Arcana</span>
                         <span id="arcana-value-display" style="color: var(--primary-purple);">0 / 16</span>
@@ -1915,6 +1979,57 @@
                     <input type="range" id="arcana_slider" min="0" max="16" value="0" disabled>
                     <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem; font-style: italic;">
                         Regen 1/round or 2/rest
+                    </p>
+                </div>
+
+                <!-- Faith Slider (Priest) -->
+                <div class="slider-container" id="faith-slider-container" style="display: none; margin-top: 25px; background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.05) 100%); border: 1px solid rgba(251, 191, 36, 0.4); box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);">
+                    <div class="slider-label">
+                        <span style="color: #fbbf24; font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);">Faith</span>
+                        <span id="faith-value-display" style="color: #fbbf24;">0 / 6</span>
+                    </div>
+                    <input type="range" id="faith_slider" min="0" max="6" value="0">
+                    <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem; font-style: italic;">
+                        Regen 1/prayer or 2/rest
+                    </p>
+                </div>
+
+                <!-- Inspiration Slider (Bard) -->
+                <div class="slider-container" id="inspiration-slider-container" style="display: none; margin-top: 25px; background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(236, 72, 153, 0.05) 100%); border: 1px solid rgba(236, 72, 153, 0.4); box-shadow: 0 0 20px rgba(236, 72, 153, 0.1);">
+                    <div class="slider-label">
+                        <span style="color: #ec4899; font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 10px rgba(236, 72, 153, 0.5);">Inspiration</span>
+                        <span id="inspiration-value-display" style="color: #ec4899;">0 / 3</span>
+                    </div>
+                    <input type="range" id="inspiration_slider" min="0" max="3" value="0">
+                    <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem; font-style: italic;">
+                        3 per day, resets on long rest
+                    </p>
+                </div>
+
+                <!-- Void Slider (Shadowblade) -->
+                <div class="slider-container" id="void-slider-container" style="display: none; margin-top: 25px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(30, 27, 75, 0.3) 100%); border: 1px solid rgba(99, 102, 241, 0.4); box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);">
+                    <div class="slider-label">
+                        <span style="color: #818cf8; font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);">Void Essence</span>
+                        <span id="void-value-display" style="color: #818cf8;">0 / 6</span>
+                    </div>
+                    <input type="range" id="void_slider" min="0" max="6" value="0">
+                    <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem; font-style: italic;">
+                        Regen 1/round in shadow or 2/rest
+                    </p>
+                </div>
+
+                <!-- Corruption Slider (Shadowblade) -->
+                <div class="slider-container" id="corruption-slider-container" style="display: none; margin-top: 25px; background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(127, 29, 29, 0.2) 100%); border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);">
+                    <div class="slider-label">
+                        <span style="color: #ef4444; font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);">Corruption</span>
+                        <span id="corruption-value-display" style="color: #ef4444;">0 / 10</span>
+                    </div>
+                    <input type="range" id="corruption_slider" min="0" max="10" value="0">
+                    <p id="corruption-warning" style="display: none; color: #ef4444; margin-top: 10px; font-size: 0.9rem; font-weight: bold;">
+                        ⚠️ High corruption! Void powers grow unstable.
+                    </p>
+                    <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem; font-style: italic;">
+                        Increases with void abilities. High corruption has consequences.
                     </p>
                 </div>
             </div>
@@ -3432,6 +3547,108 @@
             // Update visual gradient
             const percentage = (arcanaSlider.value / arcanaSlider.max) * 100;
             arcanaSlider.style.background = `linear-gradient(to right, var(--primary-purple) ${percentage}%, rgba(139, 92, 246, 0.3) ${percentage}%)`;
+
+            // Show/hide arcana slider container
+            const arcanaContainer = document.getElementById('arcana-slider-container');
+            if (arcanaContainer) {
+                arcanaContainer.style.display = isConjurer ? 'block' : 'none';
+            }
+        }
+
+        // Function to auto-fill Faith based on class (Priest only)
+        function autoFillFaith() {
+            const classValue = document.getElementById('class').value;
+            const faithSlider = document.getElementById('faith_slider');
+            const faithDisplay = document.getElementById('faith-value-display');
+            const faithContainer = document.getElementById('faith-slider-container');
+
+            const isPriest = classValue === 'Priest';
+
+            if (faithContainer) {
+                faithContainer.style.display = isPriest ? 'block' : 'none';
+            }
+
+            if (!faithSlider || !faithDisplay) return;
+
+            if (isPriest) {
+                faithSlider.max = 6;
+                faithSlider.value = 6; // Start with full faith
+                faithDisplay.textContent = `${faithSlider.value} / ${faithSlider.max}`;
+                faithSlider.dispatchEvent(new Event('input'));
+            } else {
+                faithSlider.value = 0;
+                faithDisplay.textContent = `0 / 6`;
+            }
+        }
+
+        // Function to auto-fill Inspiration based on class (Bard only)
+        function autoFillInspiration() {
+            const classValue = document.getElementById('class').value;
+            const inspirationSlider = document.getElementById('inspiration_slider');
+            const inspirationDisplay = document.getElementById('inspiration-value-display');
+            const inspirationContainer = document.getElementById('inspiration-slider-container');
+
+            const isBard = classValue === 'Bard';
+
+            if (inspirationContainer) {
+                inspirationContainer.style.display = isBard ? 'block' : 'none';
+            }
+
+            if (!inspirationSlider || !inspirationDisplay) return;
+
+            if (isBard) {
+                inspirationSlider.max = 3;
+                inspirationSlider.value = 3; // Start with full inspiration
+                inspirationDisplay.textContent = `${inspirationSlider.value} / ${inspirationSlider.max}`;
+                inspirationSlider.dispatchEvent(new Event('input'));
+            } else {
+                inspirationSlider.value = 0;
+                inspirationDisplay.textContent = `0 / 3`;
+            }
+        }
+
+        // Function to auto-fill Void and Corruption based on class (Shadowblade only)
+        function autoFillVoid() {
+            const classValue = document.getElementById('class').value;
+            const voidSlider = document.getElementById('void_slider');
+            const voidDisplay = document.getElementById('void-value-display');
+            const voidContainer = document.getElementById('void-slider-container');
+            const corruptionSlider = document.getElementById('corruption_slider');
+            const corruptionDisplay = document.getElementById('corruption-value-display');
+            const corruptionContainer = document.getElementById('corruption-slider-container');
+
+            const isShadowblade = classValue === 'Shadowblade';
+
+            if (voidContainer) {
+                voidContainer.style.display = isShadowblade ? 'block' : 'none';
+            }
+            if (corruptionContainer) {
+                corruptionContainer.style.display = isShadowblade ? 'block' : 'none';
+            }
+
+            if (voidSlider && voidDisplay) {
+                if (isShadowblade) {
+                    voidSlider.max = 6;
+                    voidSlider.value = 6; // Start with full void
+                    voidDisplay.textContent = `${voidSlider.value} / ${voidSlider.max}`;
+                    voidSlider.dispatchEvent(new Event('input'));
+                } else {
+                    voidSlider.value = 0;
+                    voidDisplay.textContent = `0 / 6`;
+                }
+            }
+
+            if (corruptionSlider && corruptionDisplay) {
+                if (isShadowblade) {
+                    corruptionSlider.max = 10;
+                    corruptionSlider.value = 0; // Start with no corruption
+                    corruptionDisplay.textContent = `${corruptionSlider.value} / ${corruptionSlider.max}`;
+                    corruptionSlider.dispatchEvent(new Event('input'));
+                } else {
+                    corruptionSlider.value = 0;
+                    corruptionDisplay.textContent = `0 / 10`;
+                }
+            }
         }
 
         // Function to apply a single bonus (like "+1 Strength")
@@ -3476,6 +3693,9 @@
             autoFillStartingEquipment();
             autoFillConsumables();
             autoFillArcana();
+            autoFillFaith();
+            autoFillInspiration();
+            autoFillVoid();
             autoFillHP();
         });
 
@@ -3508,7 +3728,15 @@
             autoFillStartingEquipment();
             autoFillConsumables();
             autoFillArcana();
+            autoFillFaith();
+            autoFillInspiration();
+            autoFillVoid();
             autoFillHP();
+
+            // Update status bar to show/hide class-specific resources
+            if (typeof updateStatusBar === 'function') {
+                updateStatusBar();
+            }
 
             // Show/hide Arcane Elixir based on class (only for Mage/Druid)
             const arcaneElixirContainer = document.getElementById('arcane-elixir-container');

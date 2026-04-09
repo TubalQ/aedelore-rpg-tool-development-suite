@@ -6307,6 +6307,36 @@ input[type="range"]::-moz-range-thumb {
     box-shadow: 0 0 10px var(--accent-purple-glow);
 }
 
+/* Faith (Priest) - Golden */
+.status-bar-faith {
+    background: linear-gradient(90deg, #fbbf24 0%, #fcd34d 100%);
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.status-faith .status-value { color: #fbbf24; }
+
+/* Inspiration (Bard) - Pink */
+.status-bar-inspiration {
+    background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+}
+
+.status-inspiration .status-value { color: #ec4899; }
+
+/* Void (Shadowblade) - Indigo */
+.status-bar-void {
+    background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.status-void .status-value { color: #818cf8; }
+
+/* Corruption (Shadowblade) - Dark Red */
+.status-corruption .status-value {
+    color: #ef4444;
+    font-weight: bold;
+}
+
 .status-dots {
     display: flex;
     gap: 4px;
